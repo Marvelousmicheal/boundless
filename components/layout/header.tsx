@@ -6,7 +6,8 @@ import { BoundlessButton } from "../buttons";
 import { Plus, Search, Menu } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 import Image from "next/image";
-import InitProject from "../sheet/init-project";
+import BoundlessSheet from "../sheet/boundless-sheet";
+import WalletConnectButton from "../wallet/WalletConnectButton";
 
 const Header = () => {
   const [open, setOpen] = useState(false)
@@ -48,14 +49,10 @@ const Header = () => {
         </BoundlessButton>
         
         {/* Connect Wallet Button */}
-        <BoundlessButton
-          variant="default"
-          size="default"
-        >
-          Connect Wallet
-        </BoundlessButton>
+        <WalletConnectButton />
+        
       </div>
-      <InitProject open={open} setOpen={setOpen} />
+      <BoundlessSheet open={open} setOpen={setOpen} />
     </header>
   );
 };

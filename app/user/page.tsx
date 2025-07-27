@@ -1,10 +1,5 @@
-import Image from "next/image";
-import { formatPrice } from "@/lib/utils";
 import { PriceDisplay } from "@/components/PriceDisplay";
-import EmptyState from "@/components/EmptyState";
-import { Button } from "@/components/ui/button";
-import { BoundlessButton } from "@/components/buttons";
-import { Coins, DatabaseIcon, History, Plus } from "lucide-react";
+import { Coins, History } from "lucide-react";
 import Card from "@/components/card";
 import RecentProjects from "@/components/overview/RecentProjects";
 import { mockProjects } from "@/lib/mock";

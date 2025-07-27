@@ -1,18 +1,13 @@
-import Image from "next/image";
-import { formatPrice } from "@/lib/utils";
 import { PriceDisplay } from "@/components/PriceDisplay";
 import EmptyState from "@/components/EmptyState";
-import { Button } from "@/components/ui/button";
 import { BoundlessButton } from "@/components/buttons";
-import { Coins, DatabaseIcon, History, Plus } from "lucide-react";
+import { Coins, History, Plus } from "lucide-react";
 import Card from "@/components/card";
 import RecentProjects from "@/components/overview/RecentProjects";
-import { mockProjects } from "@/lib/mock";
 import RecentContributions from "@/components/overview/ReecntContributions";
 import GrantHistory from "@/components/overview/GrantHistory";
 
 export default function Home() {
-  const projects = mockProjects;
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">

@@ -1,15 +1,12 @@
 "use client";
 import React from "react";
 import {
-  ChevronRight,
-  Grid,
   Package,
   Sun,
   HandHeart,
   Activity,
   Bell,
   Settings,
-  Check,
   Menu,
   User,
   LayoutDashboardIcon,
@@ -25,11 +22,9 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Image from "next/image";

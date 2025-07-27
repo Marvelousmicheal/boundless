@@ -200,7 +200,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     <MoreHorizontal className="w-4 h-4 text-white" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-[#1C1C1C] border-[#2A2A2A]">
+                <DropdownMenuContent align="end" className="bg-[#1C1C1C] border-[#2A2A2A]">
                   <DropdownMenuItem className="text-white hover:bg-[#2A2A2A]">
                     Edit Project
                   </DropdownMenuItem>

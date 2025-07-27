@@ -1,6 +1,6 @@
 import React from "react";
 import { RecentProjectsProps } from "@/types/project";
-import { ChevronRight, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import ProjectCard from "../project-card";
 import EmptyState from "../EmptyState";
 import { BoundlessButton } from "../buttons";
