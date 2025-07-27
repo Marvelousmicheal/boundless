@@ -51,15 +51,10 @@ npm install stellar-sdk
 The Zustand store manages all wallet state and operations:
 
 ```tsx
-import { useWalletStore } from '@/hooks/use-wallet'
+import { useWalletStore } from '@/hooks/use-wallet';
 
-const { 
-  publicKey, 
-  network, 
-  isConnected, 
-  connectWallet, 
-  signXDR 
-} = useWalletStore()
+const { publicKey, network, isConnected, connectWallet, signXDR } =
+  useWalletStore();
 ```
 
 #### State Properties
@@ -83,13 +78,9 @@ const {
 A complete wallet connection component:
 
 ```tsx
-import WalletConnectButton from '@/components/wallet/WalletConnectButton'
+import WalletConnectButton from '@/components/wallet/WalletConnectButton';
 
-<WalletConnectButton 
-  variant="default"
-  size="lg"
-  className="custom-class"
-/>
+<WalletConnectButton variant='default' size='lg' className='custom-class' />;
 ```
 
 #### Props
@@ -103,20 +94,20 @@ import WalletConnectButton from '@/components/wallet/WalletConnectButton'
 Handles the complete transaction signing flow:
 
 ```tsx
-import SignTransactionButton from '@/components/wallet/SignTransactionButton'
+import SignTransactionButton from '@/components/wallet/SignTransactionButton';
 
 <SignTransactionButton
   transactionParams={{
     type: 'payment',
     amount: '10',
     destination: 'GABC...XYZ',
-    asset: 'XLM'
+    asset: 'XLM',
   }}
-  onSuccess={(hash) => console.log('Success:', hash)}
-  onError={(error) => console.error('Error:', error)}
+  onSuccess={hash => console.log('Success:', hash)}
+  onError={error => console.error('Error:', error)}
 >
   Send Payment
-</SignTransactionButton>
+</SignTransactionButton>;
 ```
 
 #### Props
@@ -132,14 +123,14 @@ import SignTransactionButton from '@/components/wallet/SignTransactionButton'
 Displays transaction results with StellarExpert links:
 
 ```tsx
-import TxResultToast from '@/components/wallet/TxResultToast'
+import TxResultToast from '@/components/wallet/TxResultToast';
 
 <TxResultToast
-  hash="abc123..."
+  hash='abc123...'
   success={true}
-  message="Transaction successful!"
+  message='Transaction successful!'
   onClose={() => setShowToast(false)}
-/>
+/>;
 ```
 
 ## 🔄 Transaction Flow
@@ -155,17 +146,17 @@ const response = await fetch('/api/tx/prepare', {
     network: 'testnet',
     type: 'payment',
     amount: '10',
-    destination: 'GABC...XYZ'
-  })
-})
+    destination: 'GABC...XYZ',
+  }),
+});
 
-const { xdr } = await response.json()
+const { xdr } = await response.json();
 ```
 
 ### 2. Sign XDR
 
 ```tsx
-const signedXDR = await signXDR(xdr)
+const signedXDR = await signXDR(xdr);
 ```
 
 ### 3. Submit Transaction
@@ -177,11 +168,11 @@ const response = await fetch('/api/tx/submit', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     signedXdr: signedXDR,
-    network: 'testnet'
-  })
-})
+    network: 'testnet',
+  }),
+});
 
-const { hash, success } = await response.json()
+const { hash, success } = await response.json();
 ```
 
 ## 🎨 Styling
@@ -192,9 +183,9 @@ The components use shadcn/ui and Tailwind CSS:
 
 ```tsx
 // Custom styling
-<WalletConnectButton 
-  className="bg-gradient-to-r from-blue-500 to-purple-500"
-  variant="outline"
+<WalletConnectButton
+  className='bg-gradient-to-r from-blue-500 to-purple-500'
+  variant='outline'
 />
 ```
 
@@ -226,13 +217,13 @@ All components are mobile-responsive:
 ```tsx
 // Check if Freighter is installed
 if (!window.freighterApi) {
-  throw new Error('Freighter wallet is not installed')
+  throw new Error('Freighter wallet is not installed');
 }
 
 // Check connection
-const isConnected = await window.freighterApi.isConnected()
+const isConnected = await window.freighterApi.isConnected();
 if (!isConnected) {
-  throw new Error('Please connect your wallet first')
+  throw new Error('Please connect your wallet first');
 }
 ```
 
@@ -266,13 +257,13 @@ Replace mock implementations with real Stellar SDK:
 
 ```tsx
 // app/api/tx/prepare/route.ts
-import { Transaction, Networks, Asset, Operation } from 'stellar-sdk'
+import { Transaction, Networks, Asset, Operation } from 'stellar-sdk';
 
 // Create real transactions
 const transaction = new Transaction(operation, {
   fee: '100',
-  networkPassphrase: Networks.TESTNET
-})
+  networkPassphrase: Networks.TESTNET,
+});
 ```
 
 ### 3. Environment Variables
@@ -288,7 +279,7 @@ HORIZON_URL=https://horizon-testnet.stellar.org
 ```tsx
 // Add comprehensive error handling
 try {
-  const result = await submitTransaction(signedXDR)
+  const result = await submitTransaction(signedXDR);
   // Handle success
 } catch (error) {
   if (error.code === 'tx_failed') {
@@ -322,8 +313,10 @@ try {
 const customTransaction = {
   type: 'custom',
   operation: 'myCustomOp',
-  params: { /* custom params */ }
-}
+  params: {
+    /* custom params */
+  },
+};
 ```
 
 ### Custom Styling
@@ -333,8 +326,8 @@ const customTransaction = {
 const customWalletButton = styled(WalletConnectButton)`
   background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
   border-radius: 25px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-`
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+`;
 ```
 
 ## 🐛 Troubleshooting
@@ -359,10 +352,10 @@ const customWalletButton = styled(WalletConnectButton)`
 
 ```tsx
 // Enable debug logging
-const DEBUG = process.env.NODE_ENV === 'development'
+const DEBUG = process.env.NODE_ENV === 'development';
 
 if (DEBUG) {
-  console.log('Wallet state:', useWalletStore.getState())
+  console.log('Wallet state:', useWalletStore.getState());
 }
 ```
 
@@ -381,6 +374,7 @@ This project is part of the Boundless ecosystem and follows the project's licens
 ## 📞 Support
 
 For support and questions:
+
 - Create an issue on GitHub
 - Check the documentation
-- Review the demo page 
+- Review the demo page

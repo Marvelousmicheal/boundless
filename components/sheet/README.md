@@ -14,54 +14,50 @@ A professional, fully responsive sheet component built with React and Radix UI t
 
 ## Responsive Behavior
 
-| Screen Size | Behavior |
-|-------------|----------|
-| **Mobile** (< 768px) | Full width, bottom sheet, 85% max height, smaller close button |
-| **Tablet** (768px - 1024px) | Centered with max-width, 80% max height, medium close button |
-| **Desktop** (> 1024px) | Large max-width, optimized spacing, larger close button |
+| Screen Size                 | Behavior                                                       |
+| --------------------------- | -------------------------------------------------------------- |
+| **Mobile** (< 768px)        | Full width, bottom sheet, 85% max height, smaller close button |
+| **Tablet** (768px - 1024px) | Centered with max-width, 80% max height, medium close button   |
+| **Desktop** (> 1024px)      | Large max-width, optimized spacing, larger close button        |
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `open` | `boolean` | - | Controls the visibility of the sheet |
-| `setOpen` | `(open: boolean) => void` | - | Function to control the sheet state |
-| `title` | `string` | - | Optional title displayed in the header |
-| `children` | `React.ReactNode` | - | Content to be displayed inside the sheet |
-| `className` | `string` | - | Additional CSS classes for the sheet container |
-| `contentClassName` | `string` | - | Additional CSS classes for the sheet content |
-| `showCloseButton` | `boolean` | `true` | Whether to show the close button |
-| `closeOnOverlayClick` | `boolean` | `true` | Whether clicking overlay closes the sheet |
-| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Which side the sheet slides in from |
-| `maxHeight` | `string` | - | Maximum height of the sheet |
-| `minHeight` | `string` | `'400px'` | Minimum height of the sheet |
+| Prop                  | Type                                     | Default    | Description                                    |
+| --------------------- | ---------------------------------------- | ---------- | ---------------------------------------------- |
+| `open`                | `boolean`                                | -          | Controls the visibility of the sheet           |
+| `setOpen`             | `(open: boolean) => void`                | -          | Function to control the sheet state            |
+| `title`               | `string`                                 | -          | Optional title displayed in the header         |
+| `children`            | `React.ReactNode`                        | -          | Content to be displayed inside the sheet       |
+| `className`           | `string`                                 | -          | Additional CSS classes for the sheet container |
+| `contentClassName`    | `string`                                 | -          | Additional CSS classes for the sheet content   |
+| `showCloseButton`     | `boolean`                                | `true`     | Whether to show the close button               |
+| `closeOnOverlayClick` | `boolean`                                | `true`     | Whether clicking overlay closes the sheet      |
+| `side`                | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Which side the sheet slides in from            |
+| `maxHeight`           | `string`                                 | -          | Maximum height of the sheet                    |
+| `minHeight`           | `string`                                 | `'400px'`  | Minimum height of the sheet                    |
 
 ## Basic Usage
 
 ```tsx
-import React, { useState } from 'react'
-import BoundlessSheet from './components/sheet/boundless-sheet'
+import React, { useState } from 'react';
+import BoundlessSheet from './components/sheet/boundless-sheet';
 
 const MyComponent = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
-      <button onClick={() => setOpen(true)}>
-        Open Sheet
-      </button>
-      
+      <button onClick={() => setOpen(true)}>Open Sheet</button>
+
       <BoundlessSheet open={open} setOpen={setOpen}>
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">My Content</h2>
-          <p className="text-gray-300">
-            This is the content inside the sheet.
-          </p>
+        <div className='space-y-4'>
+          <h2 className='text-xl font-semibold text-white'>My Content</h2>
+          <p className='text-gray-300'>This is the content inside the sheet.</p>
         </div>
       </BoundlessSheet>
     </div>
-  )
-}
+  );
+};
 ```
 
 ## Advanced Usage
@@ -69,16 +65,14 @@ const MyComponent = () => {
 ### Sheet with Title
 
 ```tsx
-<BoundlessSheet 
-  open={open} 
+<BoundlessSheet
+  open={open}
   setOpen={setOpen}
-  title="My Sheet Title"
-  minHeight="500px"
+  title='My Sheet Title'
+  minHeight='500px'
 >
-  <div className="space-y-4">
-    <p className="text-gray-300">
-      Content with a custom title in the header.
-    </p>
+  <div className='space-y-4'>
+    <p className='text-gray-300'>Content with a custom title in the header.</p>
   </div>
 </BoundlessSheet>
 ```
@@ -86,14 +80,9 @@ const MyComponent = () => {
 ### Right Side Sheet
 
 ```tsx
-<BoundlessSheet 
-  open={open} 
-  setOpen={setOpen}
-  side="right"
-  maxHeight="90vh"
->
-  <div className="space-y-4">
-    <h2 className="text-xl font-semibold text-white">Navigation Menu</h2>
+<BoundlessSheet open={open} setOpen={setOpen} side='right' maxHeight='90vh'>
+  <div className='space-y-4'>
+    <h2 className='text-xl font-semibold text-white'>Navigation Menu</h2>
     {/* Navigation content */}
   </div>
 </BoundlessSheet>
@@ -102,35 +91,28 @@ const MyComponent = () => {
 ### Custom Styled Sheet
 
 ```tsx
-<BoundlessSheet 
-  open={open} 
+<BoundlessSheet
+  open={open}
   setOpen={setOpen}
-  title="Custom Styled Sheet"
-  contentClassName="bg-gradient-to-br from-purple-900/90 to-blue-900/90"
-  maxHeight="70vh"
-  minHeight="600px"
+  title='Custom Styled Sheet'
+  contentClassName='bg-gradient-to-br from-purple-900/90 to-blue-900/90'
+  maxHeight='70vh'
+  minHeight='600px'
 >
-  <div className="space-y-6">
-    {/* Custom styled content */}
-  </div>
+  <div className='space-y-6'>{/* Custom styled content */}</div>
 </BoundlessSheet>
 ```
 
 ### Sheet without Close Button
 
 ```tsx
-<BoundlessSheet 
-  open={open} 
-  setOpen={setOpen}
-  showCloseButton={false}
->
-  <div className="space-y-4">
-    <p className="text-gray-300">
-      This sheet has no close button - you need to handle closing programmatically.
+<BoundlessSheet open={open} setOpen={setOpen} showCloseButton={false}>
+  <div className='space-y-4'>
+    <p className='text-gray-300'>
+      This sheet has no close button - you need to handle closing
+      programmatically.
     </p>
-    <button onClick={() => setOpen(false)}>
-      Close Sheet
-    </button>
+    <button onClick={() => setOpen(false)}>Close Sheet</button>
   </div>
 </BoundlessSheet>
 ```
@@ -198,4 +180,4 @@ When contributing to this component:
 
 ## License
 
-This component is part of the Boundless project and follows the project's licensing terms. 
+This component is part of the Boundless project and follows the project's licensing terms.

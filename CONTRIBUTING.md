@@ -34,4 +34,4 @@ Thank you for your interest in contributing to Boundless! We welcome contributio
 - Be respectful and inclusive in all interactions.
 - For questions or discussions, use GitHub Discussions or open an issue.
 
-Thank you for helping make Boundless better! 
+Thank you for helping make Boundless better!

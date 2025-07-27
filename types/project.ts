@@ -1,21 +1,21 @@
 export interface Project {
-  id: string
-  name: string
-  description: string
-  image: string
-  link: string
-  tags: string[]
-  category: string
-  type: string
-  amount: number
-  status: string
-  createdAt: string
-  updatedAt: string
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  link: string;
+  tags: string[];
+  category: string;
+  type: string;
+  amount: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export type RecentProjectsProps = Project
+export type RecentProjectsProps = Project;
 
-export type ProjectStatus = 
+export type ProjectStatus =
   | 'draft'
   | 'under_review'
   | 'approved'
@@ -24,17 +24,17 @@ export type ProjectStatus =
   | 'funded'
   | 'in_progress'
   | 'completed'
-  | 'cancelled'
+  | 'cancelled';
 
-export type ProjectType = 
+export type ProjectType =
   | 'crowdfunding'
   | 'grant'
   | 'hackathon'
   | 'research'
   | 'creative'
-  | 'open_source'
+  | 'open_source';
 
-export type ProjectCategory = 
+export type ProjectCategory =
   | 'web3'
   | 'defi'
   | 'nft'
@@ -44,4 +44,4 @@ export type ProjectCategory =
   | 'education'
   | 'healthcare'
   | 'environment'
-  | 'technology' 
+  | 'technology';

@@ -1,17 +1,26 @@
-"use client"
+'use client';
 
-import React from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { Button } from '../ui/button'
-import { AlertTriangle, ExternalLink, RefreshCw } from 'lucide-react'
+import React from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+import { Button } from '../ui/button';
+import { AlertTriangle, ExternalLink, RefreshCw } from 'lucide-react';
 
 interface WalletErrorGuideProps {
-  error: string | null
-  onRetry: () => void
+  error: string | null;
+  onRetry: () => void;
 }
 
-const WalletErrorGuide: React.FC<WalletErrorGuideProps> = ({ error, onRetry }) => {
-  if (!error) return null
+const WalletErrorGuide: React.FC<WalletErrorGuideProps> = ({
+  error,
+  onRetry,
+}) => {
+  if (!error) return null;
 
   const getErrorGuidance = (errorMessage: string) => {
     if (errorMessage.includes('No account selected')) {
@@ -22,13 +31,16 @@ const WalletErrorGuide: React.FC<WalletErrorGuideProps> = ({ error, onRetry }) =
           'Open your Freighter wallet extension',
           'Click on the account dropdown',
           'Select an account (or create one if none exist)',
-          'Try connecting again'
+          'Try connecting again',
         ],
-        action: 'Select Account in Freighter'
-      }
+        action: 'Select Account in Freighter',
+      };
     }
-    
-    if (errorMessage.includes('not connected') || errorMessage.includes('unlock')) {
+
+    if (
+      errorMessage.includes('not connected') ||
+      errorMessage.includes('unlock')
+    ) {
       return {
         title: 'Wallet Not Connected',
         description: 'Your Freighter wallet needs to be unlocked.',
@@ -36,12 +48,12 @@ const WalletErrorGuide: React.FC<WalletErrorGuideProps> = ({ error, onRetry }) =
           'Click on the Freighter extension icon',
           'Enter your password to unlock',
           'Make sure the wallet is active',
-          'Try connecting again'
+          'Try connecting again',
         ],
-        action: 'Unlock Freighter Wallet'
-      }
+        action: 'Unlock Freighter Wallet',
+      };
     }
-    
+
     if (errorMessage.includes('not installed')) {
       return {
         title: 'Freighter Not Installed',
@@ -51,12 +63,12 @@ const WalletErrorGuide: React.FC<WalletErrorGuideProps> = ({ error, onRetry }) =
           'Download the browser extension',
           'Install and set up your wallet',
           'Create or import an account',
-          'Try connecting again'
+          'Try connecting again',
         ],
-        action: 'Install Freighter'
-      }
+        action: 'Install Freighter',
+      };
     }
-    
+
     return {
       title: 'Connection Error',
       description: 'There was an issue connecting to your wallet.',
@@ -64,70 +76,68 @@ const WalletErrorGuide: React.FC<WalletErrorGuideProps> = ({ error, onRetry }) =
         'Check if Freighter is installed and unlocked',
         'Make sure you have an account selected',
         'Try refreshing the page',
-        'Contact support if the issue persists'
+        'Contact support if the issue persists',
       ],
-      action: 'Try Again'
-    }
-  }
+      action: 'Try Again',
+    };
+  };
 
-  const guidance = getErrorGuidance(error)
+  const guidance = getErrorGuidance(error);
 
   return (
-    <Card className="bg-red-500/10 border-red-500/20">
+    <Card className='bg-red-500/10 border-red-500/20'>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-red-400">
-          <AlertTriangle className="w-5 h-5" />
+        <CardTitle className='flex items-center gap-2 text-red-400'>
+          <AlertTriangle className='w-5 h-5' />
           {guidance.title}
         </CardTitle>
-        <CardDescription className="text-red-300">
+        <CardDescription className='text-red-300'>
           {guidance.description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <h4 className="text-white font-medium">Steps to resolve:</h4>
-          <ol className="list-decimal list-inside space-y-1 text-sm text-gray-300">
+      <CardContent className='space-y-4'>
+        <div className='space-y-2'>
+          <h4 className='text-white font-medium'>Steps to resolve:</h4>
+          <ol className='list-decimal list-inside space-y-1 text-sm text-gray-300'>
             {guidance.steps.map((step, index) => (
               <li key={index}>{step}</li>
             ))}
           </ol>
         </div>
-        
-        <div className="flex gap-2">
-          <Button 
+
+        <div className='flex gap-2'>
+          <Button
             onClick={onRetry}
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
+            variant='outline'
+            size='sm'
+            className='flex items-center gap-2'
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className='w-4 h-4' />
             {guidance.action}
           </Button>
-          
+
           {guidance.action === 'Install Freighter' && (
-            <Button 
-              asChild
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <a 
-                href="https://www.freighter.app/" 
-                target="_blank" 
-                rel="noopener noreferrer"
+            <Button asChild size='sm' className='flex items-center gap-2'>
+              <a
+                href='https://www.freighter.app/'
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className='w-4 h-4' />
                 Download Freighter
               </a>
             </Button>
           )}
         </div>
-        
-        <div className="text-xs text-gray-400">
-          <p><strong>Error details:</strong> {error}</p>
+
+        <div className='text-xs text-gray-400'>
+          <p>
+            <strong>Error details:</strong> {error}
+          </p>
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default WalletErrorGuide 
+export default WalletErrorGuide;

@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
-import { isConnected, getAddress, getNetwork, setAllowed } from "@stellar/freighter-api";
+import { useEffect, useState } from 'react';
+import {
+  isConnected,
+  getAddress,
+  getNetwork,
+  setAllowed,
+} from '@stellar/freighter-api';
 
 let address: string | undefined;
-let addressLookup: Promise<{ address: string; network: string } | null> | null = null;
+let addressLookup: Promise<{ address: string; network: string } | null> | null =
+  null;
 
 // returning the same object identity every time avoids unnecessary re-renders
 const addressObject = {
@@ -43,7 +49,7 @@ export function useAccount(): typeof addressObject | null {
             const networkResult = await getNetwork();
             return {
               address: addressResult.address,
-              network: networkResult.network
+              network: networkResult.network,
             };
           } catch (error) {
             console.error('Failed to get address info:', error);
@@ -55,7 +61,7 @@ export function useAccount(): typeof addressObject | null {
     }
 
     addressLookup
-      .then(result => { 
+      .then(result => {
         if (result && result.address) {
           address = result.address;
         }
@@ -63,8 +69,8 @@ export function useAccount(): typeof addressObject | null {
       .catch(error => {
         console.error('Address lookup failed:', error);
       })
-      .finally(() => { 
-        setLoading(false); 
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -87,22 +93,27 @@ export function useWalletConnection() {
     try {
       // Set allowed first
       await setAllowed();
-      
+
       // Check if connected
       const connected = await isConnected();
       if (!connected) {
-        throw new Error('Freighter wallet is not connected. Please unlock your wallet and try again.');
+        throw new Error(
+          'Freighter wallet is not connected. Please unlock your wallet and try again.'
+        );
       }
 
       // Get address info
       const addressResult = await getAddress();
       if (!addressResult || !addressResult.address) {
-        throw new Error('No account selected in Freighter. Please select an account and try again.');
+        throw new Error(
+          'No account selected in Freighter. Please select an account and try again.'
+        );
       }
 
       return addressResult;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to connect wallet';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to connect wallet';
       setError(errorMessage);
       throw err;
     } finally {
@@ -116,6 +127,6 @@ export function useWalletConnection() {
     connect,
     isConnecting,
     error,
-    clearError
+    clearError,
   };
-} 
+}

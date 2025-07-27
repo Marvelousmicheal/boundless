@@ -85,6 +85,7 @@ flowchart TD
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+)
 - npm or yarn
 - Docker (for local blockchain and database)
@@ -106,6 +107,7 @@ flowchart TD
    - Copy `.env.example` to `.env` and fill in required values.
 
 4. **Run local development server:**
+
    ```bash
    npm run dev
    # or
@@ -113,6 +115,7 @@ flowchart TD
    ```
 
 5. **Run tests:**
+
    ```bash
    npm test
    # or

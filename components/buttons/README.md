@@ -77,4 +77,4 @@ import { BoundlessButton } from '@/components/buttons'
 - `loading` - Shows spinner and disables button
 - `success` - Green success state
 - `error` - Red error state
-- `pending` - Yellow pending state 
+- `pending` - Yellow pending state
