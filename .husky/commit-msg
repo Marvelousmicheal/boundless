@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Conventional commit message format
+# Format: <type>(<scope>): <description>
+# Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
+
+commit_regex='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .{1,50}'
+
+if ! grep -qE "$commit_regex" "$1"; then
+    echo "❌ Invalid commit message format."
+    echo "✅ Please use conventional commit format:"
+    echo "   <type>(<scope>): <description>"
+    echo ""
+    echo "📝 Examples:"
+    echo "   feat: add new wallet connection feature"
+    echo "   fix(wallet): resolve persistence issue"
+    echo "   docs: update README with setup instructions"
+    echo "   style: format code with prettier"
+    echo "   refactor(components): improve wallet button"
+    echo ""
+    echo "🔧 Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert"
+    exit 1
+fi
+
+echo "✅ Commit message format is valid!" 
