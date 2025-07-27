@@ -1,0 +1,32 @@
+# Global code owners
+* @0xdevcollins
+
+# Critical files that require senior developer review
+/.github/ @0xdevcollins
+/package.json @0xdevcollins
+/tsconfig.json @0xdevcollins
+/eslint.config.mjs @0xdevcollins
+/.prettierrc @0xdevcollins
+
+# Wallet integration files (critical for security)
+/hooks/use-wallet.ts @0xdevcollins
+/components/wallet/ @0xdevcollins
+/app/api/ @0xdevcollins
+
+# Core components
+/components/sheet/ @0xdevcollins
+/components/ui/ @0xdevcollins
+
+# Configuration and documentation
+/README.md @0xdevcollins
+/DEVELOPMENT.md @0xdevcollins
+/PRE_COMMIT_SETUP.md @0xdevcollins
+
+# CI/CD workflows
+/.github/workflows/ @0xdevcollins
+
+# Type definitions
+/types/ @0xdevcollins
+
+# Utility functions
+/lib/ @0xdevcollins 

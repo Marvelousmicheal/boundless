@@ -1,0 +1,132 @@
+name: Pre-commit Hook Validation
+
+on:
+  push:
+    branches: [main, develop, staging]
+  pull_request:
+    branches: [main, develop, staging]
+
+jobs:
+  validate-pre-commit:
+    name: Validate Pre-commit Hooks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for bypassed commits
+        run: |
+          echo "🔍 Checking for bypassed pre-commit hooks..."
+
+          # Get recent commits
+          commits=$(git log --oneline -10)
+
+          # Check for emergency bypass commits
+          bypass_commits=$(echo "$commits" | grep -i "emergency.*bypass\|no-verify\|skip.*hook" || true)
+
+          if [ -n "$bypass_commits" ]; then
+            echo "⚠️  Found commits that bypassed pre-commit hooks:"
+            echo "$bypass_commits"
+            echo ""
+            echo "❌ Emergency bypasses are not allowed in protected branches."
+            echo "Please fix the issues and commit properly."
+            exit 1
+          else
+            echo "✅ No bypassed commits found."
+          fi
+
+      - name: Validate commit message format
+        run: |
+          echo "📝 Validating commit message format..."
+
+          # Conventional commit regex
+          commit_regex='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .{1,50}'
+
+          # Get commits in this push/PR
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            commits=$(git log --pretty=format:"%s" ${{ github.event.before }}..${{ github.event.after }})
+          else
+            commits=$(git log --pretty=format:"%s" origin/main..HEAD)
+          fi
+
+          invalid_commits=""
+
+          while IFS= read -r message; do
+            if [ -n "$message" ] && ! echo "$message" | grep -qE "$commit_regex"; then
+              invalid_commits="$invalid_commits\n$message"
+            fi
+          done <<< "$commits"
+
+          if [ -n "$invalid_commits" ]; then
+            echo "❌ Invalid commit messages found:"
+            echo -e "$invalid_commits"
+            echo ""
+            echo "✅ Please use conventional commit format:"
+            echo "   <type>(<scope>): <description>"
+            exit 1
+          else
+            echo "✅ All commit messages follow conventional format."
+          fi
+
+      - name: Check for console.log statements
+        run: |
+          echo "🔍 Checking for console.log statements..."
+
+          # Get changed files
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            changed_files=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})
+          else
+            changed_files=$(git diff --name-only origin/main..HEAD)
+          fi
+
+          console_log_found=false
+
+          for file in $changed_files; do
+            if [[ "$file" =~ \.(ts|tsx|js|jsx)$ ]]; then
+              if grep -q "console\.log" "$file"; then
+                echo "❌ Found console.log in $file"
+                console_log_found=true
+              fi
+            fi
+          done
+
+          if [ "$console_log_found" = true ]; then
+            echo "❌ Console.log statements found in changed files."
+            echo "Please remove them before committing."
+            exit 1
+          else
+            echo "✅ No console.log statements found in changed files."
+          fi
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          echo "🔍 Checking for TODO/FIXME comments..."
+
+          # Get changed files
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            changed_files=$(git diff --name-only ${{ github.event.before }}..${{ github.event.after }})
+          else
+            changed_files=$(git diff --name-only origin/main..HEAD)
+          fi
+
+          todo_found=false
+
+          for file in $changed_files; do
+            if [[ "$file" =~ \.(ts|tsx|js|jsx)$ ]]; then
+              if grep -q "TODO\|FIXME" "$file"; then
+                echo "⚠️  Found TODO/FIXME in $file"
+                todo_found=true
+              fi
+            fi
+          done
+
+          if [ "$todo_found" = true ]; then
+            echo "⚠️  TODO/FIXME comments found in changed files."
+            echo "Please address them before merging."
+            # Don't fail the build, just warn
+          else
+            echo "✅ No TODO/FIXME comments found in changed files."
+          fi
