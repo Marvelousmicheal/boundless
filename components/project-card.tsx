@@ -82,7 +82,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }
   };
 
-  // Mock vote data - in real app this would come from props or API
   const getVoteData = (status: string) => {
     switch (status.toLowerCase()) {
       case 'under_review':

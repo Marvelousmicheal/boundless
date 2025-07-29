@@ -2,7 +2,6 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { login, getMe as getMeBase } from '@/lib/api/auth';
 import Google from 'next-auth/providers/google';
-// import Cookies from 'js-cookie';
 
 function safeRole(val: unknown): 'USER' | 'ADMIN' {
   return val === 'ADMIN' ? 'ADMIN' : 'USER';
@@ -144,7 +143,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
           return null;
         } catch (err) {
-          console.log('err', err);
           if (err instanceof Error && err.message === 'UNVERIFIED_EMAIL') {
             throw err;
           }

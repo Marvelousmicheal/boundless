@@ -14,7 +14,6 @@ export function formatPrice(price: number) {
     maximumFractionDigits: 2,
   }).format(price);
 
-  // Split into whole and decimal parts
   const [whole, decimal] = formatted.split('.');
 
   return {

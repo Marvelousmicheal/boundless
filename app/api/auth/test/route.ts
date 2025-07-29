@@ -4,7 +4,6 @@ export async function GET() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
   try {
-    // Test if the backend is accessible
     const response = await fetch(`${apiUrl}/auth/me`, {
       method: 'GET',
       headers: {
@@ -40,7 +39,6 @@ export async function POST(req: Request) {
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
-    // Test login endpoint
     const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {

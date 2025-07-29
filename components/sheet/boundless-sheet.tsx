@@ -39,7 +39,6 @@ const BoundlessSheet: React.FC<BoundlessSheetProps> = ({
   const isMobile = useIsMobile();
   const sheetRef = useRef<HTMLDivElement>(null);
 
-  // Handle escape key
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && open) {
@@ -49,7 +48,6 @@ const BoundlessSheet: React.FC<BoundlessSheetProps> = ({
 
     if (open) {
       document.addEventListener('keydown', handleEscape);
-      // Prevent body scroll when sheet is open
       document.body.style.overflow = 'hidden';
     }
 
@@ -59,7 +57,6 @@ const BoundlessSheet: React.FC<BoundlessSheetProps> = ({
     };
   }, [open, setOpen]);
 
-  // Responsive configuration
   const getResponsiveConfig = () => {
     if (isMobile) {
       return {
@@ -71,7 +68,6 @@ const BoundlessSheet: React.FC<BoundlessSheetProps> = ({
       };
     }
 
-    // Tablet and desktop
     if (side === 'bottom') {
       return {
         side: 'bottom' as const,

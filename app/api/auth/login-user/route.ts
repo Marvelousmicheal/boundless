@@ -14,29 +14,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Call the login function
     const response = await login({ email, password });
 
     if (response && response.accessToken) {
-      // Set cookies using Next.js cookies
       const cookieStore = await cookies();
 
-      // Set access token cookie
       cookieStore.set('accessToken', response.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 3600, // 1 hour
+        maxAge: 3600,
         path: '/',
       });
 
-      // Set refresh token cookie
       if (response.refreshToken) {
         cookieStore.set('refreshToken', response.refreshToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
-          maxAge: 604800, // 7 days
+          maxAge: 604800,
           path: '/',
         });
       }

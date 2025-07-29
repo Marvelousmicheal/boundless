@@ -19,7 +19,6 @@ A comprehensive button component that extends the base shadcn Button with Boundl
 ```tsx
 import { BoundlessButton } from '@/components/buttons'
 
-// Basic usage
 <BoundlessButton>Click me</BoundlessButton>
 
 // With variants

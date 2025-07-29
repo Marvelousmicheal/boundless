@@ -44,7 +44,6 @@ export default function SignInPage() {
           setError(
             'Please verify your email before signing in. Check your inbox for a verification link.'
           );
-          // Add a link to resend verification
           setTimeout(() => {
             router.push(
               `/auth/verify-email?email=${encodeURIComponent(email)}`

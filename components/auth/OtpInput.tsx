@@ -23,7 +23,6 @@ export function OtpInput({
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
-    // Update internal state when value prop changes
     if (value) {
       const valueArray = value.split('').slice(0, length);
       const newOtp = [...new Array(length).fill('')];
@@ -47,7 +46,6 @@ export function OtpInput({
 
     const newOtp = [...otp];
 
-    // Only allow single digit
     if (inputValue.length > 1) {
       newOtp[index] = inputValue.slice(-1);
     } else {
@@ -57,7 +55,6 @@ export function OtpInput({
     setOtp(newOtp);
     onChange(newOtp.join(''));
 
-    // Move to next input if current input is filled
     if (inputValue && index < length - 1) {
       focusInput(index + 1);
     }
@@ -69,17 +66,14 @@ export function OtpInput({
   ) => {
     if (disabled) return;
 
-    // Move to previous input on backspace if current input is empty
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       focusInput(index - 1);
     }
 
-    // Move to next input on arrow right
     if (e.key === 'ArrowRight' && index < length - 1) {
       focusInput(index + 1);
     }
 
-    // Move to previous input on arrow left
     if (e.key === 'ArrowLeft' && index > 0) {
       focusInput(index - 1);
     }
@@ -104,7 +98,6 @@ export function OtpInput({
       setOtp(newOtp);
       onChange(newOtp.join(''));
 
-      // Focus the next empty input or the last input
       const nextEmptyIndex = newOtp.findIndex(char => !char);
       if (nextEmptyIndex !== -1) {
         focusInput(nextEmptyIndex);

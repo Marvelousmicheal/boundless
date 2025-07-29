@@ -90,7 +90,6 @@ export default function SignUpPage() {
           password: '',
           confirmPassword: '',
         });
-        // Redirect to verify email page after a short delay
         setTimeout(() => {
           router.push(
             `/auth/verify-email?email=${encodeURIComponent(formData.email)}`
@@ -276,7 +275,6 @@ export default function SignUpPage() {
             <Button
               variant='outline'
               onClick={() => {
-                // Handle Google sign up
                 window.location.href = '/api/auth/signin/google';
               }}
               disabled={isLoading}

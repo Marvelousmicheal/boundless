@@ -51,8 +51,7 @@ export function useAccount(): typeof addressObject | null {
               address: addressResult.address,
               network: networkResult.network,
             };
-          } catch (error) {
-            console.error('Failed to get address info:', error);
+          } catch {
             return null;
           }
         }
@@ -66,8 +65,8 @@ export function useAccount(): typeof addressObject | null {
           address = result.address;
         }
       })
-      .catch(error => {
-        console.error('Address lookup failed:', error);
+      .catch(() => {
+        return null;
       })
       .finally(() => {
         setLoading(false);

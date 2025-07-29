@@ -12,12 +12,11 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { name, email, password } = userSchema.parse(body);
-    // Compose RegisterRequest
     const registerData = {
       email,
       password,
-      firstName: name, // or split name if needed
-      lastName: name, // You may want to parse this from name or add to schema
+      firstName: name,
+      lastName: name,
       username: email.split('@')[0],
     };
     const response = await register(registerData);
@@ -26,7 +25,6 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
-    // Handle other types of errors and ensure we always return a string message
     const errorMessage =
       error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json({ message: errorMessage }, { status: 500 });
