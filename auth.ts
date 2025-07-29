@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { login, getMe as getMeBase } from '@/lib/api/auth';
 import Google from 'next-auth/providers/google';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 function safeRole(val: unknown): 'USER' | 'ADMIN' {
   return val === 'ADMIN' ? 'ADMIN' : 'USER';
@@ -125,26 +125,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const response = await login({ email, password });
 
           if (response && response.accessToken) {
-            const user = await getMe(response.accessToken);
+            // const user = await getMe(response.accessToken);
+            // if (user) {
+            //   if (user.isVerified === false) {
+            //     throw new Error('UNVERIFIED_EMAIL');
+            //   }
 
-            if (user) {
-              if (user.isVerified === false) {
-                throw new Error('UNVERIFIED_EMAIL');
-              }
+            //   const userInfo = extractUserInfo(user);
+            //   Cookies.set('accessToken', response.accessToken);
+            //   Cookies.set('refreshToken', response.refreshToken || '');
 
-              const userInfo = extractUserInfo(user);
-              Cookies.set('accessToken', response.accessToken);
-              Cookies.set('refreshToken', response.refreshToken || '');
-
-              return {
-                ...userInfo,
-                accessToken: response.accessToken,
-                refreshToken: response.refreshToken,
-              };
-            }
+            return {
+              // ...userInfo,
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+            };
+            // }
           }
           return null;
         } catch (err) {
+          console.log('err', err);
           if (err instanceof Error && err.message === 'UNVERIFIED_EMAIL') {
             throw err;
           }

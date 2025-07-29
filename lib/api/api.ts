@@ -1,4 +1,6 @@
-// Environment validation
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Cookies from 'js-cookie';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 if (!API_BASE_URL) {
   throw new Error(
@@ -6,7 +8,6 @@ if (!API_BASE_URL) {
   );
 }
 
-// Types for API responses
 export interface ApiResponse<T = unknown> {
   data: T;
   status: number;
@@ -19,110 +20,144 @@ export interface ApiError {
   code?: string;
 }
 
-// Request configuration interface
 export interface RequestConfig {
   headers?: Record<string, string>;
   timeout?: number;
 }
 
-// Create fetch-based API client
-const createClientApi = () => {
-  const baseURL = API_BASE_URL;
-
-  const createRequestConfig = (config?: RequestConfig): RequestInit => ({
-    credentials: 'include', // Important: enables sending HTTP-only cookies
+const createClientApi = (): AxiosInstance => {
+  const instance = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      ...config?.headers,
     },
+    withCredentials: true,
   });
 
-  const handleResponse = async <T>(
-    response: Response
-  ): Promise<ApiResponse<T>> => {
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`
-      );
+  instance.interceptors.request.use(
+    config => {
+      config.withCredentials = true;
+
+      const accessToken = Cookies.get('accessToken');
+      if (accessToken && !config.headers?.Authorization) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
     }
+  );
 
-    const data = await response.json();
-    return {
-      data,
-      status: response.status,
-      statusText: response.statusText,
-    };
-  };
+  instance.interceptors.response.use(
+    (response: AxiosResponse) => {
+      return response;
+    },
+    error => {
+      if (error.response) {
+        const errorData = error.response.data;
+        const customError: ApiError = {
+          message:
+            errorData?.message ||
+            `HTTP error! status: ${error.response.status}`,
+          status: error.response.status,
+          code: errorData?.code,
+        };
+        return Promise.reject(customError);
+      } else if (error.request) {
+        return Promise.reject(new Error('Network error: No response received'));
+      } else {
+        return Promise.reject(new Error(`Request error: ${error.message}`));
+      }
+    }
+  );
 
-  const makeRequest = async <T>(
-    url: string,
-    options: RequestInit & { config?: RequestConfig } = {}
-  ): Promise<ApiResponse<T>> => {
-    const { config, ...requestOptions } = options;
-    const fullUrl = url.startsWith('http') ? url : `${baseURL}${url}`;
-
-    const response = await fetch(fullUrl, {
-      ...createRequestConfig(config),
-      ...requestOptions,
-    });
-
-    return handleResponse<T>(response);
-  };
-
-  return {
-    get: <T = unknown>(
-      url: string,
-      config?: RequestConfig
-    ): Promise<ApiResponse<T>> =>
-      makeRequest<T>(url, { method: 'GET', config }),
-
-    post: <T = unknown>(
-      url: string,
-      data?: unknown,
-      config?: RequestConfig
-    ): Promise<ApiResponse<T>> =>
-      makeRequest<T>(url, {
-        method: 'POST',
-        body: data ? JSON.stringify(data) : undefined,
-        config,
-      }),
-
-    put: <T = unknown>(
-      url: string,
-      data?: unknown,
-      config?: RequestConfig
-    ): Promise<ApiResponse<T>> =>
-      makeRequest<T>(url, {
-        method: 'PUT',
-        body: data ? JSON.stringify(data) : undefined,
-        config,
-      }),
-
-    patch: <T = unknown>(
-      url: string,
-      data?: unknown,
-      config?: RequestConfig
-    ): Promise<ApiResponse<T>> =>
-      makeRequest<T>(url, {
-        method: 'PATCH',
-        body: data ? JSON.stringify(data) : undefined,
-        config,
-      }),
-
-    delete: <T = unknown>(
-      url: string,
-      config?: RequestConfig
-    ): Promise<ApiResponse<T>> =>
-      makeRequest<T>(url, { method: 'DELETE', config }),
-  };
+  return instance;
 };
 
-// Create and export the client API instance
-const clientApi = createClientApi();
+const axiosInstance = createClientApi();
 
-// Utility functions for common HTTP methods
+const convertAxiosResponse = <T>(
+  response: AxiosResponse<T>
+): ApiResponse<T> => ({
+  data: response.data,
+  status: response.status,
+  statusText: response.statusText,
+});
+
+const convertRequestConfig = (config?: RequestConfig): AxiosRequestConfig => ({
+  headers: config?.headers,
+  timeout: config?.timeout,
+  withCredentials: true,
+});
+
+const clientApi = {
+  get: async <T = unknown>(
+    url: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>> => {
+    const response = await axiosInstance.get<T>(
+      url,
+      convertRequestConfig(config)
+    );
+    return convertAxiosResponse(response);
+  },
+
+  post: async <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>> => {
+    const response = await axiosInstance.post<T>(
+      url,
+      data,
+      convertRequestConfig(config)
+    );
+    return convertAxiosResponse(response);
+  },
+
+  put: async <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>> => {
+    const response = await axiosInstance.put<T>(
+      url,
+      data,
+      convertRequestConfig(config)
+    );
+    return convertAxiosResponse(response);
+  },
+
+  patch: async <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>> => {
+    const response = await axiosInstance.patch<T>(
+      url,
+      data,
+      convertRequestConfig(config)
+    );
+    return convertAxiosResponse(response);
+  },
+
+  delete: async <T = unknown>(
+    url: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>> => {
+    const response = await axiosInstance.delete<T>(
+      url,
+      convertRequestConfig(config)
+    );
+    return convertAxiosResponse(response);
+  },
+};
+
 export const api = {
   get: <T = unknown>(
     url: string,
