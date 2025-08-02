@@ -23,9 +23,11 @@ const submissionSteps = [
 function page() {
   return (
     <section className='bg-red-500'>
-      <section className='w-[1284px] h-[1035px]  bg-background border border-card/10 rounded-t-3xl'>
+      <section className='w-[1284px] h-[1035px]   bg-background border border-card/10 rounded-t-3xl flex'>
         <Stepper steps={submissionSteps} />
-        <ProjectSubmissionForm />
+        <div className='h-full w-[884px] p-8 flex justify-center'>
+          <ProjectSubmissionForm />
+        </div>
       </section>
     </section>
   );
