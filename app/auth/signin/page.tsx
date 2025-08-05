@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,8 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/user';
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -59,7 +60,7 @@ export default function SignInPage() {
             Cookies.set('accessToken', session?.user.accessToken ?? '');
             Cookies.set('refreshToken', session?.user.refreshToken ?? '');
           }
-          router.push('/user');
+          router.push(callbackUrl);
         }
       }
     } catch {
