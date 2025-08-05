@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 if (!API_BASE_URL) {
@@ -23,7 +24,41 @@ export interface ApiError {
 export interface RequestConfig {
   headers?: Record<string, string>;
   timeout?: number;
+  skipAuthRefresh?: boolean;
 }
+
+// Token refresh function
+const refreshAccessToken = async (): Promise<string | null> => {
+  try {
+    const refreshToken = Cookies.get('refreshToken');
+    if (!refreshToken) {
+      return null;
+    }
+
+    const response = await axios.post(
+      `${API_BASE_URL}/auth/refresh`,
+      { refreshToken },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+
+    // Update tokens in store and cookies
+    const authStore = useAuthStore.getState();
+    authStore.setTokens(accessToken, newRefreshToken);
+
+    return accessToken;
+  } catch {
+    // If refresh fails, clear auth data
+    const authStore = useAuthStore.getState();
+    authStore.clearAuth();
+    return null;
+  }
+};
 
 const createClientApi = (): AxiosInstance => {
   const instance = axios.create({
@@ -36,6 +71,7 @@ const createClientApi = (): AxiosInstance => {
     withCredentials: true,
   });
 
+  // Request interceptor
   instance.interceptors.request.use(
     config => {
       config.withCredentials = true;
@@ -53,11 +89,70 @@ const createClientApi = (): AxiosInstance => {
     }
   );
 
+  // Response interceptor with automatic token refresh
   instance.interceptors.response.use(
     (response: AxiosResponse) => {
       return response;
     },
-    error => {
+    async error => {
+      const originalRequest = error.config;
+
+      // Handle 401 errors with automatic token refresh
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        // Skip auth refresh if explicitly requested
+        if (originalRequest.skipAuthRefresh) {
+          const authStore = useAuthStore.getState();
+          authStore.clearAuth();
+          return Promise.reject({
+            message: 'Authentication required',
+            status: 401,
+            code: 'UNAUTHORIZED',
+          });
+        }
+
+        try {
+          const newAccessToken = await refreshAccessToken();
+
+          if (newAccessToken) {
+            // Retry the original request with new token
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return instance(originalRequest);
+          } else {
+            // Refresh failed, redirect to login
+            const authStore = useAuthStore.getState();
+            authStore.clearAuth();
+
+            // Only redirect if we're on the client side
+            if (typeof window !== 'undefined') {
+              window.location.href = '/auth/signin';
+            }
+
+            return Promise.reject({
+              message: 'Session expired. Please login again.',
+              status: 401,
+              code: 'SESSION_EXPIRED',
+            });
+          }
+        } catch {
+          const authStore = useAuthStore.getState();
+          authStore.clearAuth();
+
+          // Only redirect if we're on the client side
+          if (typeof window !== 'undefined') {
+            window.location.href = '/auth/signin';
+          }
+
+          return Promise.reject({
+            message: 'Session expired. Please login again.',
+            status: 401,
+            code: 'SESSION_EXPIRED',
+          });
+        }
+      }
+
+      // Handle other errors
       if (error.response) {
         const errorData = error.response.data;
         const customError: ApiError = {
@@ -188,4 +283,4 @@ export const api = {
   ): Promise<ApiResponse<T>> => clientApi.delete<T>(url, config),
 };
 
-export default clientApi;
+export default axiosInstance;
