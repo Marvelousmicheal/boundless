@@ -345,31 +345,6 @@ const ConnectWallet = ({
             <p className='text-red-400 text-sm'>{error}</p>
           </div>
         )}
-
-        {/* Help Text */}
-        <div className='text-xs text-[#B5B5B5] space-y-1'>
-          <p>
-            <strong>Freighter:</strong> Browser extension wallet
-          </p>
-          <p>
-            <strong>Albedo:</strong> Web-based wallet (opens in new window)
-          </p>
-          <p>
-            <strong>Rabet:</strong> Browser extension wallet
-          </p>
-          <p>
-            <strong>xBull:</strong> Mobile and web wallet
-          </p>
-          <p>
-            <strong>Lobstr:</strong> Mobile wallet
-          </p>
-          <p>
-            <strong>Hana:</strong> Mobile wallet
-          </p>
-          <p>
-            <strong>HOT Wallet:</strong> Hardware wallet interface
-          </p>
-        </div>
       </DialogContent>
     </Dialog>
   );
