@@ -18,7 +18,7 @@ export interface ServerUser {
 
 export async function getServerUser(): Promise<ServerUser | null> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const accessToken = cookieStore.get('accessToken')?.value;
 
     if (!accessToken) {
@@ -28,10 +28,10 @@ export async function getServerUser(): Promise<ServerUser | null> {
     const user = await getMe(accessToken);
 
     return {
-      id: user._id || user.id,
-      email: user.email,
-      name: user.profile?.firstName || user.name,
-      image: user.profile?.avatar || user.image,
+      id: (user._id || user.id) as string,
+      email: user.email as string,
+      name: (user.profile?.firstName || user.name) as string | null,
+      image: (user.profile?.avatar || user.image) as string | null,
       role: user.roles?.[0] === 'ADMIN' ? 'ADMIN' : 'USER',
       isVerified: user.isVerified,
       profile: user.profile,
@@ -53,7 +53,7 @@ export async function requireServerAuth(): Promise<ServerUser> {
 }
 
 export async function getServerAuthHeaders(): Promise<Record<string, string>> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
 
   return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};

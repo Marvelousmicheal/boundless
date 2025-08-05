@@ -347,19 +347,19 @@ export function parseNetwork(network: string): NetworkType | null {
 }
 
 /**
- * Convert StellarNetwork enum to NetworkType
- * @param network - StellarNetwork enum value
+ * Convert StellarNetwork type to NetworkType
+ * @param network - StellarNetwork type value
  * @returns NetworkType
  */
 export function stellarNetworkToType(network: StellarNetwork): NetworkType {
-  return network === StellarNetwork.TESTNET ? 'testnet' : 'public';
+  return network === 'testnet' ? 'testnet' : 'public';
 }
 
 /**
- * Convert NetworkType to StellarNetwork enum
+ * Convert NetworkType to StellarNetwork type
  * @param network - NetworkType
- * @returns StellarNetwork enum value
+ * @returns StellarNetwork type value
  */
 export function networkTypeToStellar(network: NetworkType): StellarNetwork {
-  return network === 'testnet' ? StellarNetwork.TESTNET : StellarNetwork.PUBLIC;
+  return network === 'testnet' ? 'testnet' : 'public';
 }
