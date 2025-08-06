@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Textarea } from '../ui/textarea';
 import {
   Select,
@@ -13,6 +13,7 @@ import {
 import { formatBytes } from '@/lib/utils';
 import { Badge } from '../ui/badge';
 import { Trash, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 // Dummy data for the Select components
 const fundingGoals = [
@@ -30,7 +31,15 @@ const projectTags = [
   { value: 'public-good', label: 'Public Good' },
 ];
 
-function ProjectSubmissionForm() {
+interface ProjectSubmissionFormProps {
+  onSuccess: () => void;
+  setSubmissionStatus: (status: 'idle' | 'submitting' | 'success') => void;
+}
+
+function ProjectSubmissionForm({
+  onSuccess,
+  setSubmissionStatus,
+}: ProjectSubmissionFormProps) {
   // State for all form fields
   const [projectTitle, setProjectTitle] = useState('');
   const [projectTagline, setProjectTagline] = useState('');
@@ -40,10 +49,34 @@ function ProjectSubmissionForm() {
   const [whitepaperFile, setWhitepaperFile] = useState<FileList | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<FileList | null>(null);
   const [tags, setTags] = useState<string[]>([]);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   // Refs for file inputs
   const whitepaperInputRef = useRef<HTMLInputElement>(null);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
+
+  // Check form validity
+  useEffect(() => {
+    const allFieldsFilled =
+      projectTitle.trim() !== '' &&
+      projectTagline.trim() !== '' &&
+      projectDescription.trim() !== '' &&
+      fundingGoal.trim() !== '' &&
+      fundAmount.trim() !== '' &&
+      whitepaperFile !== null &&
+      whitepaperFile.length > 0 &&
+      thumbnailFile !== null &&
+      thumbnailFile.length > 0;
+    setIsFormValid(allFieldsFilled);
+  }, [
+    projectTitle,
+    projectTagline,
+    projectDescription,
+    fundingGoal,
+    fundAmount,
+    whitepaperFile,
+    thumbnailFile,
+  ]);
 
   // Tag handlers
   const handleAddTag = (tag: string) => {
@@ -72,19 +105,49 @@ function ProjectSubmissionForm() {
   };
 
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = {
-      projectTitle,
-      projectTagline,
-      projectDescription,
-      fundingGoal,
-      fundAmount,
-      whitepaper: whitepaperFile?.[0],
-      thumbnail: thumbnailFile?.[0],
-      tags,
-    };
-    console.log('Form data submitted:', formData);
+    if (!isFormValid) return;
+
+    setSubmissionStatus('submitting');
+    toast.loading('Submitting your project...');
+
+    const formData = new FormData();
+    formData.append('name', projectTitle);
+    formData.append('tagline', projectTagline);
+    formData.append('description', projectDescription);
+    formData.append('funding_goal', fundingGoal);
+    formData.append('fund_amount', fundAmount);
+    formData.append('tags', JSON.stringify(tags));
+    if (whitepaperFile) {
+      formData.append('whitepaper', whitepaperFile[0]);
+    }
+    if (thumbnailFile) {
+      formData.append('thumbnail', thumbnailFile[0]);
+    }
+
+    try {
+      const response = await fetch(
+        'https://www.api.boundlessfi.xyz/api/projects',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Project submission failed');
+      }
+
+      toast.dismiss();
+      toast.success('Project submitted successfully!');
+      onSuccess();
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast.dismiss();
+      toast.error('Failed to submit project. Please try again.');
+      setSubmissionStatus('idle');
+    }
   };
 
   return (
@@ -394,7 +457,12 @@ function ProjectSubmissionForm() {
 
         <button
           type='submit'
-          className='border border-stepper-border  w-[171px] mt-4 text-base font-medium text-card/30 bg-stepper-foreground px-4 py-2 rounded-[10px]'
+          disabled={!isFormValid}
+          className={`w-[171px] mt-4 text-base font-medium px-4 py-2 rounded-[10px] transition-colors ${
+            isFormValid
+              ? 'bg-primary text-background border border-primary'
+              : 'bg-stepper-foreground text-card/30 border border-stepper-border cursor-not-allowed'
+          }`}
         >
           Submit for Review
         </button>

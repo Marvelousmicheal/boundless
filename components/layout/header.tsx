@@ -8,9 +8,71 @@ import { SidebarTrigger } from '../ui/sidebar';
 import Image from 'next/image';
 import BoundlessSheet from '../sheet/boundless-sheet';
 import WalletConnectButton from '../wallet/WalletConnectButton';
+import ProjectSubmissionForm from '../project/ProjectSubmissionForm';
+import ProjectSubmissionLoading from '../project/ProjectSubmissionLoading';
+import ProjectSubmissionSuccess from '../project/ProjectSubmissionSuccess';
+import { Stepper } from '../stepper';
+
+type Step = {
+  title: string;
+  description: string;
+  state: 'pending' | 'active' | 'completed';
+};
+
+const initialSteps: Step[] = [
+  {
+    title: 'Initialize',
+    description: 'Submit your project idea to kickstart your campaign journey.',
+    state: 'active',
+  },
+  {
+    title: 'Project Details',
+    description: 'Provide detailed information about your project.',
+    state: 'pending',
+  },
+  {
+    title: 'Review & Submit',
+    description: 'Review your submission and finalize your entry.',
+    state: 'pending',
+  },
+];
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState('idle');
+  const [steps, setSteps] = useState<Step[]>(initialSteps);
+
+  const handleSuccess = () => {
+    setSubmissionStatus('success');
+    setSteps(prevSteps =>
+      prevSteps.map((step, index) => {
+        if (index === 0) {
+          return { ...step, state: 'completed' };
+        }
+        if (index === 1) {
+          return { ...step, state: 'active' };
+        }
+        return step;
+      })
+    );
+  };
+
+  const renderContent = () => {
+    switch (submissionStatus) {
+      case 'submitting':
+        return <ProjectSubmissionLoading />;
+      case 'success':
+        return <ProjectSubmissionSuccess />;
+      default:
+        return (
+          <ProjectSubmissionForm
+            onSuccess={handleSuccess}
+            setSubmissionStatus={setSubmissionStatus}
+          />
+        );
+    }
+  };
+
   return (
     <header className='bg-transparent border-none flex flex-col sm:flex-row shrink-0 items-start sm:items-center gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 sticky top-0 z-50'>
       {/* Mobile Menu Trigger - Only visible on mobile */}
@@ -51,7 +113,12 @@ const Header = () => {
         {/* Connect Wallet Button */}
         <WalletConnectButton />
       </div>
-      <BoundlessSheet open={open} setOpen={setOpen} />
+      <BoundlessSheet open={open} setOpen={setOpen}>
+        <div className='flex'>
+          <Stepper steps={steps} />
+          <div className='flex-1'>{renderContent()}</div>
+        </div>
+      </BoundlessSheet>
     </header>
   );
 };
