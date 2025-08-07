@@ -19,7 +19,7 @@ import {
   ResetPasswordRequest,
   ResetPasswordResponse,
 } from '@/lib/api/types';
-import Cookies from 'js-cookie';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 export const register = async (
   data: RegisterRequest
@@ -35,18 +35,28 @@ export const register = async (
 };
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
-  const res = await api.post<{
-    success: boolean;
-    data: LoginResponse;
-    message: string;
-    timestamp: string;
-    path: string;
-  }>('/auth/login', data);
-  if (res.data.data.accessToken) {
-    Cookies.set('accessToken', res.data.data.accessToken);
-    Cookies.set('refreshToken', res.data.data.refreshToken || '');
+  try {
+    const res = await api.post<{
+      success: boolean;
+      data: LoginResponse;
+      message: string;
+      timestamp: string;
+      path: string;
+    }>('/auth/login', data);
+
+    const loginData = res.data.data;
+
+    if (loginData.accessToken) {
+      // Use the auth store to handle login
+      const authStore = useAuthStore.getState();
+      await authStore.login(loginData.accessToken, loginData.refreshToken);
+    }
+
+    return loginData;
+  } catch (error) {
+    // Re-throw the error for the component to handle
+    throw error;
   }
-  return res.data.data;
 };
 
 export const githubAuth = async (
@@ -78,17 +88,29 @@ export const getMe = async (token?: string): Promise<GetMeResponse> => {
 };
 
 export const logout = async (token?: string): Promise<LogoutResponse> => {
-  const config = token
-    ? { headers: { Authorization: `Bearer ${token}` } }
-    : undefined;
-  const res = await api.post<{
-    success: boolean;
-    data: LogoutResponse;
-    message: string;
-    timestamp: string;
-    path: string;
-  }>('/auth/logout', undefined, config);
-  return res.data.data;
+  try {
+    const config = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : undefined;
+    const res = await api.post<{
+      success: boolean;
+      data: LogoutResponse;
+      message: string;
+      timestamp: string;
+      path: string;
+    }>('/auth/logout', undefined, config);
+
+    // Use the auth store to handle logout
+    const authStore = useAuthStore.getState();
+    await authStore.logout();
+
+    return res.data.data;
+  } catch (error) {
+    // Even if the API call fails, clear the local auth state
+    const authStore = useAuthStore.getState();
+    authStore.clearAuth();
+    throw error;
+  }
 };
 
 export const verifyOtp = async (
@@ -141,4 +163,34 @@ export const resetPassword = async (
     path: string;
   }>('/auth/reset-password', data);
   return res.data.data;
+};
+
+// Enhanced auth utilities
+export const refreshUserData = async (): Promise<void> => {
+  const authStore = useAuthStore.getState();
+  await authStore.refreshUser();
+};
+
+export const checkAuthStatus = async (): Promise<boolean> => {
+  try {
+    const authStore = useAuthStore.getState();
+    const { accessToken, isAuthenticated } = authStore;
+
+    if (!accessToken || !isAuthenticated) {
+      return false;
+    }
+
+    // Try to refresh user data to verify token is still valid
+    await authStore.refreshUser();
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const getAuthHeaders = (): Record<string, string> => {
+  const authStore = useAuthStore.getState();
+  const { accessToken } = authStore;
+
+  return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 };

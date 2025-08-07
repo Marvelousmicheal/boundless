@@ -28,6 +28,8 @@ import {
 } from './ui/dropdown-menu';
 import { Button } from './ui/button';
 import CircularProgress from './ui/circular-progress';
+import { motion } from 'framer-motion';
+import { cardHover, fadeInUp } from '@/lib/motion';
 
 interface ProjectCardProps {
   project: Project;
@@ -120,9 +122,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const actionCounts = getActionCounts(project.status);
 
   return (
-    <div className='bg-[#101010] rounded-[16px] p-3 w-full max-w-sm mx-auto transition-all duration-200 cursor-pointer group hover:bg-[#151515]'>
+    <motion.div
+      className='bg-[#101010] rounded-[16px] p-3 w-full max-w-sm mx-auto transition-all duration-200 cursor-pointer group hover:bg-[#151515]'
+      whileHover='hover'
+      variants={cardHover}
+      initial='hidden'
+      animate='visible'
+    >
       {/* Image Container */}
-      <div className='relative h-40 sm:h-48 rounded-[12px] overflow-hidden mb-4'>
+      <motion.div
+        className='relative h-40 sm:h-48 rounded-[12px] overflow-hidden mb-4'
+        variants={fadeInUp}
+      >
         <Image
           src={project.image}
           fill
@@ -132,24 +143,36 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         />
 
         {/* Status Badge */}
-        <Badge
-          className={cn(
-            'absolute top-3 right-3 px-2 py-1 rounded-[6px] text-xs font-medium',
-            getStatusColor(project.status)
-          )}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
         >
-          {project.status.replace('_', ' ')}
-        </Badge>
+          <Badge
+            className={cn(
+              'absolute top-3 right-3 px-2 py-1 rounded-[6px] text-xs font-medium',
+              getStatusColor(project.status)
+            )}
+          >
+            {project.status.replace('_', ' ')}
+          </Badge>
+        </motion.div>
 
         {/* Category Badge */}
-        <Badge
-          className={cn(
-            'absolute top-12 right-3 px-2 py-1 rounded-[6px] text-xs font-medium',
-            getCategoryColor(project.category)
-          )}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3 }}
         >
-          {project.category}
-        </Badge>
+          <Badge
+            className={cn(
+              'absolute top-12 right-3 px-2 py-1 rounded-[6px] text-xs font-medium',
+              getCategoryColor(project.category)
+            )}
+          >
+            {project.category}
+          </Badge>
+        </motion.div>
 
         {/* Ellipsis Menu - Conditional */}
 
@@ -157,12 +180,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Avatar className='absolute top-3 left-3 w-8 h-8 cursor-pointer'>
-                <AvatarImage src='https://github.com/shadcn.png' />
-                <AvatarFallback className='bg-blue-500'>
-                  <UserIcon className='w-4 h-4 text-white' />
-                </AvatarFallback>
-              </Avatar>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Avatar className='absolute top-3 left-3 w-8 h-8 cursor-pointer'>
+                  <AvatarImage src='https://github.com/shadcn.png' />
+                  <AvatarFallback className='bg-blue-500'>
+                    <UserIcon className='w-4 h-4 text-white' />
+                  </AvatarFallback>
+                </Avatar>
+              </motion.div>
             </TooltipTrigger>
             <TooltipContent
               side='bottom'
@@ -174,10 +202,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      </div>
+      </motion.div>
 
       {/* Content */}
-      <div className='space-y-4'>
+      <motion.div className='space-y-4' variants={fadeInUp}>
         {/* Title and Price */}
         <div className='space-y-2'>
           <div className='flex justify-between items-center'>
@@ -187,31 +215,36 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 : project.name}
             </h2>
             {showEllipsisMenu && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='ghost'
-                    size='icon'
-                    className=' w-8 h-8 bg-background hover:bg-background/40'
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className=' w-8 h-8 bg-background hover:bg-background/40'
+                    >
+                      <MoreHorizontal className='w-4 h-4 text-white' />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align='end'
+                    className='bg-[#1C1C1C] border-[#2A2A2A]'
                   >
-                    <MoreHorizontal className='w-4 h-4 text-white' />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align='end'
-                  className='bg-[#1C1C1C] border-[#2A2A2A]'
-                >
-                  <DropdownMenuItem className='text-white hover:bg-[#2A2A2A]'>
-                    Edit Project
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-white hover:bg-[#2A2A2A]'>
-                    View Details
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className='text-white hover:bg-[#2A2A2A]'>
-                    Delete Project
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem className='text-white hover:bg-[#2A2A2A]'>
+                      Edit Project
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='text-white hover:bg-[#2A2A2A]'>
+                      View Details
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='text-white hover:bg-[#2A2A2A]'>
+                      Delete Project
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </motion.div>
             )}
           </div>
           <PriceDisplay
@@ -286,8 +319,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

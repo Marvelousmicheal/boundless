@@ -1,5 +1,8 @@
+'use client';
 import React from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { fadeInUp, scaleIn } from '@/lib/motion';
 
 interface EmptyStateProps {
   title: string;
@@ -15,31 +18,44 @@ const EmptyState = ({
   type = 'default',
 }: EmptyStateProps) => {
   return (
-    <div className='flex flex-col items-center justify-center h-full'>
+    <motion.div
+      className='flex flex-col items-center justify-center h-full'
+      initial='hidden'
+      animate='visible'
+      variants={fadeInUp}
+    >
       <div className='flex flex-col items-center justify-center gap-6 text-center'>
         {type === 'default' && (
-          <Image
-            src='/empty/default.svg'
-            alt='Empty State'
-            width={100}
-            height={100}
-          />
+          <motion.div variants={scaleIn}>
+            <Image
+              src='/empty/default.svg'
+              alt='Empty State'
+              width={100}
+              height={100}
+            />
+          </motion.div>
         )}
         {type === 'comment' && (
-          <Image
-            src='/empty/comment.svg'
-            alt='Empty State'
-            width={100}
-            height={100}
-          />
+          <motion.div variants={scaleIn}>
+            <Image
+              src='/empty/comment.svg'
+              alt='Empty State'
+              width={100}
+              height={100}
+            />
+          </motion.div>
         )}
-        <div className='space-y-1'>
+        <motion.div className='space-y-1' variants={fadeInUp}>
           <h3 className='text-xl text-white leading-[30px]'>{title}</h3>
           <p className='text-sm text-white/60 leading-[145%]'>{description}</p>
-        </div>
+        </motion.div>
       </div>
-      {action && <div className='mt-4'>{action}</div>}
-    </div>
+      {action && (
+        <motion.div className='mt-4' variants={fadeInUp}>
+          {action}
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 

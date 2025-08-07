@@ -1,6 +1,9 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import React from 'react';
+import { motion } from 'framer-motion';
+import { cardHover, iconSpin } from '@/lib/motion';
 
 const Card = ({
   title,
@@ -12,14 +15,24 @@ const Card = ({
   bottomText: React.ReactNode;
 }) => {
   return (
-    <div className='bg-[#1C1C1C] rounded-[12px] p-4 sm:p-6 w-full border border-[#21413F3D] shadow-[0_1.5px_4px_-1px_rgba(16,25,40,0.07)] hover:border-[#2A2A2A] transition-colors'>
+    <motion.div
+      className='bg-[#1C1C1C] rounded-[12px] p-4 sm:p-6 w-full border border-[#21413F3D] shadow-[0_1.5px_4px_-1px_rgba(16,25,40,0.07)] hover:border-[#2A2A2A] transition-colors'
+      whileHover='hover'
+      variants={cardHover}
+    >
       <div className='flex items-center justify-between mb-3 sm:mb-4'>
         <h3 className='text-[#F5F5F5] leading-[145%] font-medium text-sm sm:text-base'>
           {title}
         </h3>
-        <Button variant='ghost' size='icon' className='w-8 h-8 sm:w-10 sm:h-10'>
-          <ChevronRight className='w-3 h-3 sm:w-4 sm:h-4 text-[#F5F5F5]' />
-        </Button>
+        <motion.div variants={iconSpin}>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='w-8 h-8 sm:w-10 sm:h-10'
+          >
+            <ChevronRight className='w-3 h-3 sm:w-4 sm:h-4 text-[#F5F5F5]' />
+          </Button>
+        </motion.div>
       </div>
       <span className='text-white leading-[120%] font-semibold text-2xl sm:text-3xl lg:text-[32px] tracking-[-0.64px] block'>
         {value}
@@ -29,7 +42,7 @@ const Card = ({
           {bottomText}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
