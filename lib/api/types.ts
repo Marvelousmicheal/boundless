@@ -220,6 +220,14 @@ export interface DashboardOverviewResponse {
   platformMetrics: PlatformMetrics;
 }
 
+export interface MilestoneInit {
+  title: string;
+  description: string;
+  deliveryDate: string; // YYYY-MM-DD
+  fundPercentage: number; // 0-100
+  fundAmount: number; // derived: fundAmount * fundPercentage / 100
+}
+
 export interface ProjectInitRequest {
   title: string;
   description: string;
@@ -227,9 +235,12 @@ export interface ProjectInitRequest {
   type: 'crowdfund' | 'grant';
   category: string;
   fundAmount: number;
-  thumbnail: string;
   tags: string[];
+  // Optional assets until upload integration is wired
+  thumbnail?: string;
   whitepaperUrl?: string;
+  // Milestones payload
+  milestones: MilestoneInit[];
 }
 
 export interface ProjectInitResponse {

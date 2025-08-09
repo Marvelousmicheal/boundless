@@ -1,4 +1,3 @@
-'use server';
 import api from './api';
 import { ProjectInitRequest } from './types';
 

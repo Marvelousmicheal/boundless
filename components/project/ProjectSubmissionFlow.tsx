@@ -59,12 +59,7 @@ function ProjectSubmissionFlow() {
       case 'success':
         return <ProjectSubmissionSuccess />;
       default:
-        return (
-          <ProjectSubmissionForm
-            onSuccess={handleSuccess}
-            setSubmissionStatus={setSubmissionStatus}
-          />
-        );
+        return <ProjectSubmissionForm onComplete={() => handleSuccess()} />;
     }
   };
 

@@ -9,7 +9,6 @@ import {
 import { XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-import Indicator from '../stepper/indicator';
 
 interface BoundlessSheetProps {
   open: boolean;
@@ -141,7 +140,6 @@ const BoundlessSheet: React.FC<BoundlessSheetProps> = ({
             'px-4 pb-4'
           )}
         >
-          <Indicator />
           {children}
         </div>
       </SheetContent>

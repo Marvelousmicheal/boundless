@@ -1,29 +1,26 @@
 'use client';
 import { PriceDisplay } from '@/components/PriceDisplay';
-import { Coins, History } from 'lucide-react';
 import Card from '@/components/card';
 import RecentProjects from '@/components/overview/RecentProjects';
 import { mockProjects } from '@/lib/mock';
 import RecentContributions from '@/components/overview/ReecntContributions';
 import GrantHistory from '@/components/overview/GrantHistory';
-import { BoundlessButton } from '@/components/buttons';
-import { getMe } from '@/lib/api/auth';
 import PageTransition from '@/components/PageTransition';
+import { Coins, History } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function UserPage() {
+  const { user } = useAuth();
   return (
     <PageTransition>
       <div className='min-h-screen'>
         <div className='p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto'>
           {/* Header Section */}
           <div className='mb-8'>
-            <h1 className='text-2xl sm:text-3xl lg:text-[32px] font-medium leading-[120%] tracking-[-0.64px] text-white'>
-              Hello, Collins
+            <h1 className='text-2xl sm:text-3xl lg:text-[32px] font-medium leading-[120%] tracking-[-0.64px] text-white '>
+              Hello, {user?.name?.split(' ')[0]}
             </h1>
           </div>
-          <BoundlessButton onClick={() => getMe()}>
-            Get user data
-          </BoundlessButton>
           {/* Stats Cards Grid */}
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
             <Card

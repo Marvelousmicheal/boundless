@@ -12,15 +12,17 @@ import {
 } from '../ui/select';
 import { formatBytes } from '@/lib/utils';
 import { Badge } from '../ui/badge';
-import { Trash, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { DollarSign, Package, Trash, X } from 'lucide-react';
+import { Input } from '../ui/input';
 
 // Dummy data for the Select components
 const fundingGoals = [
-  { value: 'seed', label: 'Seed Round' },
-  { value: 'series-a', label: 'Series A' },
-  { value: 'public-sale', label: 'Public Sale' },
-  { value: 'community-pool', label: 'Community Pool' },
+  { value: 'Technology', label: 'Technology' },
+  { value: 'Healthcare', label: 'Healthcare' },
+  { value: 'Education', label: 'Education' },
+  { value: 'Environment', label: 'Environment' },
+  { value: 'Social', label: 'Social' },
+  { value: 'Other', label: 'Other' },
 ];
 
 const projectTags = [
@@ -31,25 +33,50 @@ const projectTags = [
   { value: 'public-good', label: 'Public Good' },
 ];
 
+export interface ProjectSubmissionData {
+  title: string;
+  tagline: string;
+  description: string;
+  category: string;
+  fundAmount: number;
+  tags: string[];
+  whitepaperFile?: File | null;
+  thumbnailFile?: File | null;
+}
+
 interface ProjectSubmissionFormProps {
-  onSuccess: () => void;
-  setSubmissionStatus: (status: 'idle' | 'submitting' | 'success') => void;
+  onComplete: (data: ProjectSubmissionData) => void;
+  initialData?: ProjectSubmissionData;
+  onChange?: (data: ProjectSubmissionData) => void;
 }
 
 function ProjectSubmissionForm({
-  onSuccess,
-  setSubmissionStatus,
+  onComplete,
+  initialData,
+  onChange,
 }: ProjectSubmissionFormProps) {
   // State for all form fields
-  const [projectTitle, setProjectTitle] = useState('');
-  const [projectTagline, setProjectTagline] = useState('');
-  const [projectDescription, setProjectDescription] = useState('');
-  const [fundingGoal, setFundingGoal] = useState('');
-  const [fundAmount, setFundAmount] = useState('');
-  const [whitepaperFile, setWhitepaperFile] = useState<FileList | null>(null);
-  const [thumbnailFile, setThumbnailFile] = useState<FileList | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
+  const [projectTitle, setProjectTitle] = useState(initialData?.title ?? '');
+  const [projectTagline, setProjectTagline] = useState(
+    initialData?.tagline ?? ''
+  );
+  const [projectDescription, setProjectDescription] = useState(
+    initialData?.description ?? ''
+  );
+  const [category, setCategory] = useState(initialData?.category ?? '');
+  const [fundAmount, setFundAmount] = useState(
+    initialData?.fundAmount != null ? String(initialData.fundAmount) : ''
+  );
+  const [whitepaperFile, setWhitepaperFile] = useState<File | null>(
+    initialData?.whitepaperFile ?? null
+  );
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(
+    initialData?.thumbnailFile ?? null
+  );
+  const [tags, setTags] = useState<string[]>(initialData?.tags ?? []);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [tagQuery, setTagQuery] = useState('');
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
 
   // Refs for file inputs
   const whitepaperInputRef = useRef<HTMLInputElement>(null);
@@ -61,28 +88,44 @@ function ProjectSubmissionForm({
       projectTitle.trim() !== '' &&
       projectTagline.trim() !== '' &&
       projectDescription.trim() !== '' &&
-      fundingGoal.trim() !== '' &&
+      category.trim() !== '' &&
       fundAmount.trim() !== '' &&
       whitepaperFile !== null &&
-      whitepaperFile.length > 0 &&
-      thumbnailFile !== null &&
-      thumbnailFile.length > 0;
+      thumbnailFile !== null;
     setIsFormValid(allFieldsFilled);
+    const snapshot: ProjectSubmissionData = {
+      title: projectTitle,
+      tagline: projectTagline,
+      description: projectDescription,
+      category,
+      fundAmount: Number(fundAmount || 0),
+      tags,
+      whitepaperFile: whitepaperFile ?? null,
+      thumbnailFile: thumbnailFile ?? null,
+    };
+    onChange?.(snapshot);
   }, [
     projectTitle,
     projectTagline,
     projectDescription,
-    fundingGoal,
+    category,
     fundAmount,
     whitepaperFile,
     thumbnailFile,
+    tags,
+    onChange,
   ]);
 
   // Tag handlers
-  const handleAddTag = (tag: string) => {
-    if (tag && !tags.includes(tag)) {
-      setTags([...tags, tag]);
-    }
+  const normalizeTag = (value: string) => value.trim();
+
+  const handleAddTag = (rawTag: string) => {
+    const tag = normalizeTag(rawTag);
+    if (!tag) return;
+    if (tags.includes(tag)) return;
+    setTags(prev => [...prev, tag]);
+    setTagQuery('');
+    setIsSuggestionsOpen(false);
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
@@ -104,66 +147,31 @@ function ProjectSubmissionForm({
     }
   };
 
-  // Form submission handler
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleNext = () => {
     if (!isFormValid) return;
-
-    setSubmissionStatus('submitting');
-    toast.loading('Submitting your project...');
-
-    const formData = new FormData();
-    formData.append('name', projectTitle);
-    formData.append('tagline', projectTagline);
-    formData.append('description', projectDescription);
-    formData.append('funding_goal', fundingGoal);
-    formData.append('fund_amount', fundAmount);
-    formData.append('tags', JSON.stringify(tags));
-    if (whitepaperFile) {
-      formData.append('whitepaper', whitepaperFile[0]);
-    }
-    if (thumbnailFile) {
-      formData.append('thumbnail', thumbnailFile[0]);
-    }
-
-    try {
-      const response = await fetch(
-        'https://www.api.boundlessfi.xyz/api/projects',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Project submission failed');
-      }
-
-      toast.dismiss();
-      toast.success('Project submitted successfully!');
-      onSuccess();
-    } catch (error) {
-      console.error('Submission error:', error);
-      toast.dismiss();
-      toast.error('Failed to submit project. Please try again.');
-      setSubmissionStatus('idle');
-    }
+    const submissionData: ProjectSubmissionData = {
+      title: projectTitle,
+      tagline: projectTagline,
+      description: projectDescription,
+      category,
+      fundAmount: Number(fundAmount),
+      tags,
+      whitepaperFile: whitepaperFile ?? null,
+      thumbnailFile: thumbnailFile ?? null,
+    };
+    onComplete(submissionData);
   };
 
   return (
     <div className='text-white'>
       <h5>Submit your project information</h5>
-      <form
-        onSubmit={handleSubmit}
-        className='w-[500px] flex flex-col gap-3 pt-3 pb-6'
-      >
-        {/* Project Title */}
+      <div className='w-[500px] flex flex-col gap-3 pt-3 pb-6'>
         <div className='flex flex-col gap-1'>
           <label className='text-xs text-card font-medium'>
             Project Title <span className='text-red-500'>*</span>
           </label>
           <div className='w-full h-12 flex items-center gap-3 p-4 rounded-[12px] bg-stepper-foreground border border-stepper-border'>
-            <Image src='/cube.svg' width={20} height={20} alt='icon' />
+            <Package className='size-5 text-card' />
             <input
               value={projectTitle}
               onChange={e => setProjectTitle(e.target.value)}
@@ -174,7 +182,6 @@ function ProjectSubmissionForm({
           </div>
         </div>
 
-        {/* Project Tagline */}
         <div className='flex flex-col gap-1'>
           <label className='text-xs text-card font-medium'>
             Project Tagline <span className='text-red-500'>*</span>
@@ -190,7 +197,6 @@ function ProjectSubmissionForm({
           </div>
         </div>
 
-        {/* Project Description */}
         <div className='flex flex-col gap-1'>
           <label className='text-xs text-card font-medium flex justify-between'>
             <span>
@@ -212,16 +218,16 @@ function ProjectSubmissionForm({
         {/* Funding Goal */}
         <div className='flex flex-col gap-1'>
           <label className='text-xs text-card font-medium'>
-            Funding Goal <span className='text-red-500'>*</span>
+            Category <span className='text-red-500'>*</span>
           </label>
-          <Select onValueChange={setFundingGoal} value={fundingGoal}>
+          <Select onValueChange={setCategory} value={category}>
             <SelectTrigger className='w-full !h-12 flex items-center !gap-3 p-4 rounded-[12px] bg-stepper-foreground border border-stepper-border focus:ring-0'>
               <div className='flex items-center gap-2'>
                 <Image src='/select.svg' width={20} height={20} alt='icon' />
-                <SelectValue placeholder='Select a funding goal' />
+                <SelectValue placeholder='Select a category' />
               </div>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='max-h-[200px] bg-background rounded-[12px] font-normal text-base text-placeholder border border-stepper-border overflow-y-auto'>
               {fundingGoals.map(goal => (
                 <SelectItem key={goal.value} value={goal.value}>
                   {goal.label}
@@ -237,13 +243,13 @@ function ProjectSubmissionForm({
             Fund Amount <span className='text-red-500'>*</span>
           </label>
           <div className='w-full h-12 flex items-center gap-3 p-4 rounded-[12px] bg-stepper-foreground border border-stepper-border'>
-            <Image src='/dollar-sign.svg' width={20} height={20} alt='icon' />
-            <input
+            <DollarSign className='size-5 text-card' />
+            <Input
               value={fundAmount}
               onChange={e => setFundAmount(e.target.value)}
               type='number'
-              className='w-full bg-transparent font-normal text-base text-placeholder focus:outline-none'
-              placeholder='Enter the amount'
+              className='w-full bg-transparent font-normal text-base text-placeholder focus:outline-none !border-none'
+              placeholder='Enter the amount you need to fund this project'
             />
           </div>
         </div>
@@ -257,7 +263,7 @@ function ProjectSubmissionForm({
           <div className='w-full h-[83px] flex justify-between p-4 rounded-[12px] bg-stepper-foreground border border-stepper-border'>
             <div className='flex gap-3 items-center'>
               <div className='bg-card size-12 rounded-full justify-center items-center flex'>
-                {whitepaperFile && whitepaperFile.length > 0 ? (
+                {whitepaperFile ? (
                   <Image
                     src='/green-circle.svg'
                     width={24}
@@ -274,16 +280,16 @@ function ProjectSubmissionForm({
                 )}
               </div>
               <div className='space-y-1'>
-                {whitepaperFile && whitepaperFile.length > 0 ? (
+                {whitepaperFile ? (
                   <>
                     <h5 className='font-semibold text-card text-base'>
-                      {whitepaperFile[0].name}
+                      {whitepaperFile.name}
                     </h5>
                     <p className='font-normal text-sm text-[#40B869] flex gap-0.5 items-center'>
                       Upload complete
                       <div className='size-1 bg-placeholder rounded-full' />
                       <span className='text-placeholder'>
-                        {formatBytes(whitepaperFile[0].size)}
+                        {formatBytes(whitepaperFile.size)}
                       </span>
                     </p>
                   </>
@@ -305,10 +311,10 @@ function ProjectSubmissionForm({
               type='file'
               className='hidden'
               ref={whitepaperInputRef}
-              onChange={e => setWhitepaperFile(e.target.files)}
+              onChange={e => setWhitepaperFile(e.target.files?.[0] ?? null)}
               accept='.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             />
-            {whitepaperFile && whitepaperFile.length > 0 ? (
+            {whitepaperFile ? (
               <button
                 type='button'
                 className='text-base font-normal text-background bg-transparent px-4 py-2 rounded-[10px]'
@@ -336,7 +342,7 @@ function ProjectSubmissionForm({
           <div className='w-full h-[83px] flex justify-between p-4 rounded-[12px] bg-stepper-foreground border border-stepper-border'>
             <div className='flex gap-3 items-center'>
               <div className='bg-card size-12 rounded-full justify-center items-center flex'>
-                {thumbnailFile && thumbnailFile.length > 0 ? (
+                {thumbnailFile ? (
                   <Image
                     src='/green-circle.svg'
                     width={24}
@@ -353,16 +359,16 @@ function ProjectSubmissionForm({
                 )}
               </div>
               <div className='space-y-1'>
-                {thumbnailFile && thumbnailFile.length > 0 ? (
+                {thumbnailFile ? (
                   <>
                     <h5 className='font-semibold text-card text-base'>
-                      {thumbnailFile[0].name}
+                      {thumbnailFile.name}
                     </h5>
                     <p className='font-normal text-sm text-[#40B869] flex gap-0.5 items-center'>
                       Upload complete
                       <div className='size-1 bg-placeholder rounded-full' />
                       <span className='text-placeholder'>
-                        {formatBytes(thumbnailFile[0].size)}
+                        {formatBytes(thumbnailFile.size)}
                       </span>
                     </p>
                   </>
@@ -384,10 +390,10 @@ function ProjectSubmissionForm({
               type='file'
               className='hidden'
               ref={thumbnailInputRef}
-              onChange={e => setThumbnailFile(e.target.files)}
+              onChange={e => setThumbnailFile(e.target.files?.[0] ?? null)}
               accept='image/png, image/jpeg, image/gif'
             />
-            {thumbnailFile && thumbnailFile.length > 0 ? (
+            {thumbnailFile ? (
               <button
                 type='button'
                 className='text-base font-normal text-background bg-transparent px-4 py-2 rounded-[10px]'
@@ -410,63 +416,120 @@ function ProjectSubmissionForm({
         {/* Add Tags */}
         <div className='flex flex-col gap-2'>
           <label className='text-xs text-card font-medium flex items-center justify-between'>
-            Add Tags <span className='text-placeholder'>Optional</span>
+            Tags <span className='text-placeholder'>Optional</span>
           </label>
           <div className='relative'>
-            <Select onValueChange={handleAddTag}>
-              <SelectTrigger className='w-full !h-12 flex items-center !gap-3 p-4 rounded-[12px] bg-stepper-foreground border border-stepper-border focus:ring-0'>
-                <div className='flex items-center gap-2'>
-                  <Image src='/tag.svg' width={20} height={20} alt='icon' />
-                  <SelectValue placeholder='Select a tag' />
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                {projectTags.map(tag => (
-                  <SelectItem
-                    key={tag.value}
-                    value={tag.value}
-                    disabled={tags.includes(tag.value)}
+            <div className='w-full min-h-12 flex items-center gap-2 p-2 rounded-[12px] bg-stepper-foreground border border-stepper-border flex-wrap'>
+              {tags.map(tag => (
+                <Badge
+                  key={tag}
+                  className='flex items-center gap-1 bg-background text-card'
+                >
+                  {projectTags.find(t => t.value === tag)?.label || tag}
+                  <button
+                    type='button'
+                    className='ml-1 rounded-full outline-none hover:bg-destructive/20'
+                    onClick={() => handleRemoveTag(tag)}
+                    aria-label={`Remove tag ${tag}`}
                   >
-                    {tag.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                    <X className='size-3' />
+                  </button>
+                </Badge>
+              ))}
+              <input
+                type='text'
+                value={tagQuery}
+                onChange={e => {
+                  setTagQuery(e.target.value);
+                  setIsSuggestionsOpen(true);
+                }}
+                onFocus={() => setIsSuggestionsOpen(true)}
+                onBlur={() => {
+                  // Delay closing to allow click on suggestion
+                  setTimeout(() => setIsSuggestionsOpen(false), 120);
+                }}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    handleAddTag(tagQuery);
+                  } else if (
+                    e.key === 'Backspace' &&
+                    tagQuery === '' &&
+                    tags.length > 0
+                  ) {
+                    handleRemoveTag(tags[tags.length - 1]);
+                  }
+                }}
+                className='flex-1 min-w-[140px] bg-transparent font-normal text-base text-placeholder focus:outline-none placeholder:text-placeholder/60'
+                placeholder='Type and press Enter'
+                aria-label='Add tag'
+              />
+            </div>
 
-            {tags.length > 0 && (
-              <div className='absolute top-1/2 left-12 -translate-y-1/2 flex flex-wrap gap-2 items-center pointer-events-none'>
-                {tags.map(tag => (
-                  <Badge
-                    key={tag}
-                    className='flex items-center gap-1 pointer-events-auto bg-background text-card'
-                  >
-                    {projectTags.find(t => t.value === tag)?.label || tag}
-                    <button
-                      type='button'
-                      className='ml-1 rounded-full outline-none hover:bg-destructive/20'
-                      onClick={() => handleRemoveTag(tag)}
-                    >
-                      <X className='size-3' />
-                    </button>
-                  </Badge>
-                ))}
+            {/* Suggestions dropdown */}
+            {isSuggestionsOpen && tagQuery.trim().length > 0 && (
+              <div className='absolute z-50 mt-1 w-full max-h-40 overflow-auto bg-background border border-stepper-border rounded-md shadow-md'>
+                <ul className='py-1'>
+                  {projectTags
+                    .filter(
+                      t =>
+                        !tags.includes(t.value) &&
+                        (t.label
+                          .toLowerCase()
+                          .includes(tagQuery.toLowerCase()) ||
+                          t.value
+                            .toLowerCase()
+                            .includes(tagQuery.toLowerCase()))
+                    )
+                    .map(t => (
+                      <li key={t.value}>
+                        <button
+                          type='button'
+                          onMouseDown={e => e.preventDefault()}
+                          onClick={() => handleAddTag(t.value)}
+                          className='w-full text-left px-3 py-2 hover:bg-stepper-foreground text-card'
+                        >
+                          {t.label}
+                        </button>
+                      </li>
+                    ))}
+                  {/* Create custom tag */}
+                  {!projectTags.some(
+                    t =>
+                      t.value.toLowerCase() === tagQuery.toLowerCase() ||
+                      t.label.toLowerCase() === tagQuery.toLowerCase()
+                  ) &&
+                    !tags.includes(tagQuery.trim()) && (
+                      <li>
+                        <button
+                          type='button'
+                          onMouseDown={e => e.preventDefault()}
+                          onClick={() => handleAddTag(tagQuery)}
+                          className='w-full text-left px-3 py-2 hover:bg-stepper-foreground text-card/80'
+                        >
+                          Create "{tagQuery.trim()}"
+                        </button>
+                      </li>
+                    )}
+                </ul>
               </div>
             )}
           </div>
         </div>
 
         <button
-          type='submit'
+          type='button'
           disabled={!isFormValid}
+          onClick={handleNext}
           className={`w-[171px] mt-4 text-base font-medium px-4 py-2 rounded-[10px] transition-colors ${
             isFormValid
               ? 'bg-primary text-background border border-primary'
               : 'bg-stepper-foreground text-card/30 border border-stepper-border cursor-not-allowed'
           }`}
         >
-          Submit for Review
+          Set Milestone
         </button>
-      </form>
+      </div>
     </div>
   );
 }

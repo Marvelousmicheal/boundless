@@ -2,6 +2,7 @@
 import React from 'react';
 import { Project } from '@/types/project';
 import { BoundlessButton } from '@/components/buttons';
+import { useProjectSheetStore } from '@/lib/stores/project-sheet-store';
 import {
   ThumbsUp,
   UserIcon,
@@ -48,6 +49,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   showCreatorName = false,
   showEllipsisMenu = false,
 }) => {
+  const sheet = useProjectSheetStore();
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -308,7 +310,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               variant='secondary'
               size='sm'
               className='flex-1 border-[1.4px] border-[#2B2B2B] rounded-[10px] bg-[#212121] hover:bg-[#2A2A2A] disabled:bg-[#212121] disabled:border-[#2B2B2B] disabled:text-[#484848]'
-              onClick={() => onVote?.(project.id)}
+              onClick={() => sheet.openValidate(project)}
               disabled={
                 project.status === 'under_review' ||
                 project.status === 'rejected' ||

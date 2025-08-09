@@ -20,7 +20,7 @@ function Stepper({ steps }: StepperProps) {
         return {
           title: 'text-card',
           description: 'text-white/60',
-          line: 'border-primary', // Active line for completed steps
+          line: 'border-primary',
         };
       case 'active':
         return {
@@ -28,7 +28,7 @@ function Stepper({ steps }: StepperProps) {
             'bg-primary text-background border border-stepper-border-active/25',
           title: 'text-card',
           description: 'text-white/60',
-          line: 'border-card/30', // Inactive line for active steps
+          line: 'border-card/30',
         };
       case 'pending':
       default:
@@ -37,13 +37,13 @@ function Stepper({ steps }: StepperProps) {
             'bg-stepper-foreground text-muted-foreground border border-stepper-border',
           title: 'text-stepper-text-inactive',
           description: 'text-white/40',
-          line: 'border-card/30', // Inactive line for pending steps
+          line: 'border-card/30',
         };
     }
   };
 
   return (
-    <main className='p-8 flex flex-col w-[400px]'>
+    <div className='flex flex-col w-[400px] sticky top-0'>
       {steps.map((step, index) => {
         const styles = getStepStyles(step.state);
         const isLastStep = index === steps.length - 1;
@@ -75,14 +75,14 @@ function Stepper({ steps }: StepperProps) {
               <h4 className={`font-base font-medium ${styles.title}`}>
                 {step.title}
               </h4>
-              <p className={`font-normal text-sm ${styles.description}`}>
+              <p className={`text-sm leading-[145%] ${styles.description}`}>
                 {step.description}
               </p>
             </div>
           </figure>
         );
       })}
-    </main>
+    </div>
   );
 }
 

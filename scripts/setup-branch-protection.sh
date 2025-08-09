@@ -130,10 +130,16 @@ update_codeowners() {
 /hooks/use-wallet.ts @$CURRENT_USER
 /components/wallet/ @$CURRENT_USER
 /app/api/ @$CURRENT_USER
-
+/lib/api/ @$CURRENT_USER
+/lib/stores/ @$CURRENT_USER
+/lib/utils/ @$CURRENT_USER
+/lib/hooks/ @$CURRENT_USER
+/lib/hooks/use-wallet.ts @$CURRENT_USER
 # Core components
 /components/sheet/ @$CURRENT_USER
 /components/ui/ @$CURRENT_USER
+/components/project/ @$CURRENT_USER
+/components/ @$CURRENT_USER
 
 # Configuration and documentation
 /README.md @$CURRENT_USER
