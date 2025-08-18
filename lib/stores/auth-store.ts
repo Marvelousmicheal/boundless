@@ -3,6 +3,25 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { getMe, logout } from '@/lib/api/auth';
 import Cookies from 'js-cookie';
 
+// Simple JWT decode function to extract user ID from token
+function decodeJWT(token: string): any {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
+
 export interface User {
   id: string;
   email: string;
@@ -36,6 +55,7 @@ export interface AuthState {
   refreshUser: () => Promise<void>;
   clearAuth: () => void;
   updateUser: (updates: Partial<User>) => void;
+  syncWithSession: (sessionUser: any) => Promise<void>;
 }
 
 // Safe localStorage access for SSR
@@ -97,13 +117,10 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ isLoading: true, error: null });
 
-          // Set tokens first
           get().setTokens(accessToken, refreshToken);
 
-          // Fetch user data
           const user = await getMe(accessToken);
 
-          // Transform user data to match our User interface
           const transformedUser: User = {
             id: (user._id || user.id) as string,
             email: user.email as string,
@@ -128,7 +145,6 @@ export const useAuthStore = create<AuthState>()(
             error: errorMessage,
             isLoading: false,
           });
-          // Clear tokens if login fails
           get().setTokens(null, null);
           throw error;
         }
@@ -230,6 +246,56 @@ export const useAuthStore = create<AuthState>()(
           set({ user: { ...user, ...updates } });
         }
       },
+
+      syncWithSession: async sessionUser => {
+        if (sessionUser && sessionUser.accessToken) {
+          try {
+            // Use the access token to fetch fresh user data
+            const user = await getMe(sessionUser.accessToken);
+
+            const transformedUser: User = {
+              id: (user._id || user.id) as string,
+              email: user.email as string,
+              name: (user.profile?.firstName || user.name) as string | null,
+              image: (user.profile?.avatar || user.image) as string | null,
+              role: (user.roles?.[0] === 'ADMIN' ? 'ADMIN' : 'USER') as
+                | 'USER'
+                | 'ADMIN',
+              isVerified: user.isVerified as boolean | undefined,
+              profile: user.profile as User['profile'],
+            };
+
+            set({
+              user: transformedUser,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+          } catch {
+            // Fallback: try to extract user ID from JWT token
+            const decodedToken = decodeJWT(sessionUser.accessToken);
+            const userId =
+              decodedToken?.userId ||
+              decodedToken?.user_id ||
+              decodedToken?.sub;
+
+            if (sessionUser.email) {
+              const fallbackUser: User = {
+                id: userId || 'unknown',
+                email: sessionUser.email,
+                name: sessionUser.name,
+                image: sessionUser.image,
+                role: 'USER',
+              };
+
+              set({
+                user: fallbackUser,
+                isAuthenticated: true,
+                isLoading: false,
+              });
+            }
+          }
+        }
+      },
     }),
     {
       name: 'auth-storage',
@@ -247,6 +313,23 @@ export const useAuthStore = create<AuthState>()(
         }
         if (typeof window !== 'undefined' && state?.refreshToken) {
           Cookies.set('refreshToken', state.refreshToken);
+        }
+
+        // Initialize auth state from cookies if we have tokens but no user
+        if (
+          typeof window !== 'undefined' &&
+          state?.accessToken &&
+          !state?.user
+        ) {
+          // This will trigger a refresh of user data
+          setTimeout(() => {
+            const store = useAuthStore.getState();
+            if (store.accessToken && !store.user) {
+              store.refreshUser().catch(() => {
+                // Silently handle refresh failure
+              });
+            }
+          }, 100);
         }
       },
     }

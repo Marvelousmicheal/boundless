@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { RecentProjectsProps } from '@/types/project';
 import { mockCampaignDetails } from '../mock';
 import api from './api';
 import { ProjectInitRequest } from './types';
@@ -6,6 +7,13 @@ import { ProjectInitRequest } from './types';
 export const initProject = async (data: ProjectInitRequest) => {
   const res = await api.post('/projects', data);
   return res;
+};
+
+export const getProjects = async (): Promise<{
+  projects: RecentProjectsProps[];
+}> => {
+  const res = await api.get('/projects');
+  return res.data.data;
 };
 
 export const getCampaignDetails = async (_projectId: string) => {

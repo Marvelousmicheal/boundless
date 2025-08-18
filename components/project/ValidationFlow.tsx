@@ -6,6 +6,7 @@ import { Project } from '@/types/project';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import CommentModal from '../comment/modal';
 import {
   ThumbsUp,
   MessageCircle,
@@ -26,11 +27,7 @@ interface ValidationFlowProps {
   onSuccess?: () => void;
 }
 
-const ValidationFlow: React.FC<ValidationFlowProps> = ({
-  project,
-  onVote,
-  onSuccess,
-}) => {
+const ValidationFlow: React.FC<ValidationFlowProps> = ({ project, onVote }) => {
   const [voteCount, setVoteCount] = useState(12);
   const [commentCount] = useState(4);
   const [hasVoted, setHasVoted] = useState(false);
@@ -112,8 +109,8 @@ const ValidationFlow: React.FC<ValidationFlowProps> = ({
   ];
 
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-      <div className='lg:col-span-2 space-y-6'>
+    <div>
+      <div className='w-[500px] flex flex-col gap-3 pt-3 pb-6 space-y-6'>
         <div className='flex justify-between items-start'>
           <div className='flex items-center space-x-4'>
             <div className='w-12 h-12 bg-[#2A2A2A] rounded-full flex items-center justify-center'>
@@ -197,13 +194,20 @@ const ValidationFlow: React.FC<ValidationFlowProps> = ({
                 <span className='font-semibold'>{voteCount}</span>
               </Button>
 
-              <Button
-                variant='outline'
-                className='flex items-center space-x-2 border-[#2B2B2B] bg-[#212121] hover:bg-[#2A2A2A] text-[#F5F5F5]'
+              <CommentModal
+                onCommentSubmit={comment => {
+                  // eslint-disable-next-line no-console
+                  console.log('Comment submitted:', comment);
+                }}
               >
-                <MessageCircle className='w-4 h-4 fill-transparent' />
-                <span className='font-semibold'>{commentCount}</span>
-              </Button>
+                <Button
+                  variant='outline'
+                  className='flex items-center space-x-2 border-[#2B2B2B] bg-[#212121] hover:bg-[#2A2A2A] text-[#F5F5F5]'
+                >
+                  <MessageCircle className='w-4 h-4 fill-transparent' />
+                  <span className='font-semibold'>{commentCount}</span>
+                </Button>
+              </CommentModal>
             </div>
 
             <div className='flex items-center space-x-2 text-[#B5B5B5] text-sm'>
@@ -268,18 +272,6 @@ const ValidationFlow: React.FC<ValidationFlowProps> = ({
         <div>
           <h3 className='text-[#F5F5F5] font-medium mb-4'>Timeline</h3>
           <TimelineStepper project={project} />
-        </div>
-
-        {/* Proceed to Launch Button */}
-        <div className='pt-6 border-t border-[#2B2B2B]'>
-          <div className='flex justify-end'>
-            <Button
-              onClick={() => onSuccess?.()}
-              className='bg-primary text-background hover:bg-primary/90 px-6'
-            >
-              Proceed to Launch
-            </Button>
-          </div>
         </div>
       </div>
     </div>

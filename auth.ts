@@ -123,15 +123,7 @@ export const authConfig = {
               ? credentials.password
               : '';
 
-          console.log('Attempting login with:', { email, password: '***' });
-
           const response = await login({ email, password });
-
-          console.log('Login response:', {
-            success: !!response,
-            hasAccessToken: !!response?.accessToken,
-            hasRefreshToken: !!response?.refreshToken,
-          });
 
           if (response && response.accessToken) {
             const user = await getMe(response.accessToken);
@@ -141,7 +133,6 @@ export const authConfig = {
               }
 
               const userInfo = extractUserInfo(user);
-              console.log('User info extracted:', userInfo);
 
               return {
                 ...userInfo,
@@ -150,14 +141,11 @@ export const authConfig = {
               };
             }
           }
-          console.log('Login failed: No valid response or user data');
           return null;
         } catch (err) {
-          console.error('Login error in NextAuth:', err);
           if (err instanceof Error && err.message === 'UNVERIFIED_EMAIL') {
             throw err;
           }
-          // Return null for any other error to indicate login failure
           return null;
         }
       },

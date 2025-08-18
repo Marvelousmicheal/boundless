@@ -32,7 +32,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { useAuth } from '@/hooks/use-auth';
-import { Button } from '../ui/button';
 
 const navigationItems = [
   {
@@ -304,13 +303,6 @@ const SidebarLayout: React.FC = () => {
                       </motion.div>
                     );
                   })}
-                  <Button
-                    onClick={() => {
-                      // Debug button - removed console.log
-                    }}
-                  >
-                    Get store data
-                  </Button>
                 </SidebarMenu>
               </motion.div>
             </SidebarGroupContent>
