@@ -4,6 +4,7 @@ import { Project } from '@/types/project';
 import { BoundlessButton } from '@/components/buttons';
 import BoundlessSheet from './sheet/boundless-sheet';
 import ValidationFlow from './project/ValidationFlow';
+import LaunchCampaignFlow from './campaigns/LaunchCampaignFlow';
 import CommentModal from './comment/modal';
 import {
   ThumbsUp,
@@ -71,6 +72,24 @@ const steps: Step[] = [
   },
 ];
 
+const campaignSteps: Step[] = [
+  {
+    title: 'Initialize',
+    description: 'Submit your project idea to kickstart your campaign journey.',
+    state: 'completed',
+  },
+  {
+    title: 'Validate',
+    description: 'Get admin approval and gather public support through voting.',
+    state: 'completed',
+  },
+  {
+    title: 'Launch Campaign',
+    description: 'Set milestones, activate escrow, and start receiving funds.',
+    state: 'active',
+  },
+];
+
 const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   onVote,
@@ -78,7 +97,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   showEllipsisMenu = false,
 }) => {
   const [validationSheetOpen, setValidationSheetOpen] = useState(false);
+  const [launchCampaignSheetOpen, setLaunchCampaignSheetOpen] = useState(false);
   const [stepperState] = useState<Step[]>(steps);
+  const [campaignStepperState] = useState<Step[]>(campaignSteps);
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -370,7 +391,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
           {project.status === 'validated' && (
             <div>
-              <BoundlessButton>Start Campaign</BoundlessButton>
+              <BoundlessButton onClick={() => setLaunchCampaignSheetOpen(true)}>
+                Start Campaign
+              </BoundlessButton>
             </div>
           )}
         </div>
@@ -392,6 +415,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               project={project}
               onVote={onVote}
               onSuccess={() => setValidationSheetOpen(false)}
+            />
+          </div>
+        </div>
+      </BoundlessSheet>
+
+      {/* Launch Campaign Flow Sheet */}
+      <BoundlessSheet
+        open={launchCampaignSheetOpen}
+        setOpen={setLaunchCampaignSheetOpen}
+        side='bottom'
+        maxHeight='90vh'
+      >
+        <div className='grid grid-cols-1 md:grid-cols-2 justify-between relative'>
+          <div className='sticky top-0'>
+            <Stepper steps={campaignStepperState} />
+          </div>
+          <div className='flex-1'>
+            <LaunchCampaignFlow
+              onComplete={() => setLaunchCampaignSheetOpen(false)}
             />
           </div>
         </div>
