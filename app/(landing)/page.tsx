@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import BeamBackground from '@/components/landing-page/BeamBackground';
 import { Hero } from '@/components/landing-page';
 import HowBoundlessWork from '@/components/landing-page/HowBoundlessWork';
@@ -12,10 +12,15 @@ import WhyBoundless from '@/components/landing-page/WhyBoundless';
 import BackedBy from '@/components/landing-page/BackedBy';
 import NewsLetter from '@/components/landing-page/NewsLetter';
 import BlogSection from '@/components/landing-page/blog/BlogSection';
+import { useRouter } from 'next/navigation';
 
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/waitlist');
+  }, [router]);
 
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin);
 
