@@ -34,7 +34,6 @@ export default function LandingPage() {
         effects: true,
       });
 
-      // Snap scroll between #hero and #how-boundless-work
       ScrollTrigger.create({
         trigger: '#hero',
         start: 'top top',
@@ -53,18 +52,13 @@ export default function LandingPage() {
           ease: 'power1.inOut',
         },
       });
-      // Scroll to #how-boundless-work on scroll down from #hero
       const handleWheel = (e: WheelEvent) => {
         const hero = document.getElementById('hero');
         const how = document.getElementById('how-boundless-work');
         if (!hero || !how) return;
 
         const heroRect = hero.getBoundingClientRect();
-        // Only trigger if the user is at the bottom of #hero and scrolling down
-        if (
-          heroRect.bottom - 10 <= window.innerHeight && // allow for small offset
-          e.deltaY > 0
-        ) {
+        if (heroRect.bottom - 10 <= window.innerHeight && e.deltaY > 0) {
           e.preventDefault();
           gsap.to(window, {
             duration: 0.8,
@@ -74,7 +68,6 @@ export default function LandingPage() {
         }
       };
 
-      // Attach wheel event to #hero
       setTimeout(() => {
         const hero = document.getElementById('hero');
         if (hero) {
@@ -82,7 +75,6 @@ export default function LandingPage() {
         }
       }, 0);
 
-      // Clean up event listener
       ScrollTrigger.addEventListener('refreshInit', () => {
         const hero = document.getElementById('hero');
         if (hero) {
