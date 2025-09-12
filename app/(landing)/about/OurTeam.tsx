@@ -3,7 +3,7 @@ import React from 'react';
 
 const OurTeam = () => {
   return (
-    <div className='lg:p-25 p-8'>
+    <div>
       <p
         className='text-sm font-medium bg-clip-text text-transparent w-fit mx-auto'
         style={{
@@ -18,7 +18,7 @@ const OurTeam = () => {
         Meet the Brains Behind Boundless
       </h1>
       <p
-        className='mt-2 bg-clip-text text-transparent lg:w-2/5 mx-auto '
+        className='mt-2 bg-clip-text text-transparent text-center lg:w-2/5 mx-auto '
         style={{
           backgroundImage:
             'linear-gradient(93.2deg, #B5B5B5 15.93%, #FFFFFF 73.28%)',

@@ -4,8 +4,8 @@ import React from 'react';
 
 const Partners = () => {
   return (
-    <div className='lg:py-50 md:py-36 sm:py-25 py-16 lg:px-25 md:px-20 sm:px-12 px-5'>
-      <h1 className='lg:text-5xl md:text-4xl text-[32px]'>
+    <div className='text-center'>
+      <h1 className='lg:text-5xl md:text-4xl text-[32px] text-white'>
         Backed by Trusted Partners
       </h1>
       <p
