@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { ILogger, LoggerData } from '@/types/logger.types';
 
 type LogLevel = LoggerData['LogLevel'];
