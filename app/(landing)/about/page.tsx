@@ -1,6 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { generatePageMetadata } from '@/lib/metadata';
+import Missionpage from '@/components/About-Mission/Missionpage';
 import AboutUsDifferent from '@/components/landing-page/about/AboutUsDifferent';
 
 import Timeline from '@/components/landing-page/about/timeline/Timeline';
@@ -16,6 +17,9 @@ export const metadata: Metadata = generatePageMetadata('about');
 const AboutPage = () => {
   return (
     <AboutLayout>
+      <div className='text-white  text-center'>
+        <Missionpage />
+      </div>
       {/* Hero Section */}
       {/* Boundless Difference */}
       <Timeline />
