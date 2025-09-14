@@ -18,24 +18,16 @@ export const metadata: Metadata = generatePageMetadata('about');
 const AboutPage = () => {
   return (
     <AboutLayout>
-      <div className='text-white  text-center'>
-        <Missionpage />
-      </div>
+      <AboutUsHero />
+      <Missionpage />
+      <AboutUsDifferent />
+
       {/* Hero Section */}
       {/* Boundless Difference */}
       <Timeline />
-
-      <div className='relative'>
-        <AboutUsHero />
-        <div className='relative z-10 space-y-[23px] md:space-y-[80px] max-w-[1300px] mx-auto'>
-          <OurTeam />
-          <Partners />
-          <div className='text-white text-4xl font-bold text-center mt-10'>
-            <TestimonialsSection testimonials={testimonials} />
-          </div>
-        </div>
-        <AboutUsDifferent />
-      </div>
+      <OurTeam />
+      <Partners />
+      <TestimonialsSection testimonials={testimonials} />
     </AboutLayout>
   );
 };
