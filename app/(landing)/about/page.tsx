@@ -5,7 +5,6 @@ import Missionpage from '@/components/About-Mission/Missionpage';
 import AboutUsDifferent from '@/components/landing-page/about/AboutUsDifferent';
 
 import Timeline from '@/components/landing-page/about/timeline/Timeline';
-import AboutLayout from './layout';
 
 import TestimonialsSection from '@/components/testimonials/TestimonialsSection';
 import { testimonials } from '@/components/testimonials/data/testimonial';
@@ -17,17 +16,17 @@ export const metadata: Metadata = generatePageMetadata('about');
 
 const AboutPage = () => {
   return (
-    <AboutLayout>
+    <section>
       <AboutUsHero />
-      <Missionpage />
-      <AboutUsDifferent />
-
-
-      <Timeline />
-      <OurTeam />
-      <Partners />
-      <TestimonialsSection testimonials={testimonials} />
-    </AboutLayout>
+      <div className='relative z-10 space-y-[23px] md:space-y-[80px] max-w-[1300px] mx-auto'>
+        <Missionpage />
+        <AboutUsDifferent />
+        <Timeline />
+        <OurTeam />
+        <Partners />
+        <TestimonialsSection testimonials={testimonials} />
+      </div>
+    </section>
   );
 };
 
