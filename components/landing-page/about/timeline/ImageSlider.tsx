@@ -98,14 +98,14 @@ const ImageSlider = () => {
       {/* Left and Right button */}
       <button
         onClick={prev}
-        className='absolute left-32  top-1/2 -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 rounded-full p-2 shadow-lg transition-colors z-10'
+        className='absolute backdrop-blur-[7px] bg-[rgba(255,255,255,0.60)] left-32 border border-white/48  top-1/2 -translate-y-1/2  rounded-full p-2 shadow-lg transition-colors z-10'
       >
         <ChevronLeft className='w-6 h-6 text-white' />
       </button>
 
       <button
         onClick={next}
-        className='absolute right-24 top-1/2 -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 rounded-full p-2 shadow-lg transition-colors z-10'
+        className='absolute right-24 border border-white/48 top-1/2 -translate-y-1/2 bg-white/60 hover:bg-white/30 rounded-full p-2 shadow-lg transition-colors z-10'
       >
         <ChevronRight className='w-6 h-6 text-white' />
       </button>
