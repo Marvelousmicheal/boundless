@@ -208,8 +208,8 @@ const ValidationFlow: React.FC<ValidationFlowProps> = ({ project, onVote }) => {
               </Button>
 
               <CommentModal
-                onCommentSubmit={comment => {
-                  console.log('Comment submitted:', comment);
+                onCommentSubmit={() => {
+                  // TODO: Handle comment submission
                 }}
               >
                 <Button
