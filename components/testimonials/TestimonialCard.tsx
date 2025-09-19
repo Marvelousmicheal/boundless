@@ -12,6 +12,7 @@ interface TestimonialCardProps {
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({
   avatarSrc = '/avatar-placeholder.png',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   avatarFallback = 'U',
   name,
   username,
