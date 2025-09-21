@@ -1,10 +1,11 @@
+'use client';
+
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import BlogCard from './BlogCard';
 
-// Types
 interface BlogPost {
   id: number;
   title: string;
@@ -22,7 +23,6 @@ interface CardStackItem {
   content: React.ReactNode;
 }
 
-// Mock blog data
 const mockBlogs: BlogPost[] = [
   {
     id: 1,
@@ -86,23 +86,21 @@ const mockBlogs: BlogPost[] = [
   },
 ];
 
-// Constants
 const CARD_TRANSITION_DURATION = 0.5;
 const AUTO_SLIDE_INTERVAL = 5000;
 const MOBILE_BREAKPOINT = 640;
 
-// CardStack Component
 interface CardStackProps {
   items: CardStackItem[];
   offset?: number;
   scaleFactor?: number;
 }
 
-const CardStack: React.FC<CardStackProps> = ({
+const CardStack = ({
   items,
   offset = 20,
   scaleFactor = 0.1,
-}) => {
+}: CardStackProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
@@ -180,10 +178,13 @@ const CardStack: React.FC<CardStackProps> = ({
   );
 
   return (
-    <div className='relative mx-auto w-full max-w-sm'>
-      {/* Cards Container */}
+    <div
+      className='relative mx-auto w-full max-w-sm'
+      role='region'
+      aria-label='Blog carousel'
+    >
       <div className='relative flex h-80 w-full items-center justify-center'>
-        {items.map((card, index) => {
+        {items.map((card: CardStackItem, index: number) => {
           const { xPosition, scale, zIndex, opacity } =
             calculateCardPosition(index);
 
@@ -204,6 +205,8 @@ const CardStack: React.FC<CardStackProps> = ({
                 duration: CARD_TRANSITION_DURATION,
                 ease: 'easeInOut',
               }}
+              role='group'
+              aria-label={`Blog post ${index + 1} of ${items.length}`}
             >
               {card.content}
             </motion.div>
@@ -211,36 +214,40 @@ const CardStack: React.FC<CardStackProps> = ({
         })}
       </div>
 
-      {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className='absolute top-1/2 -left-4 z-30 h-[48px] w-[48px] -translate-y-1/2 rounded-full border border-[rgba(255,255,255,0.48)] bg-[#FFFFFF33] p-3 shadow-lg backdrop-blur-[7px] transition-colors duration-200 hover:bg-[#ffffff88]'
-        aria-label='Previous blog'
+        className='absolute top-1/2 -left-4 z-30 h-[48px] w-[48px] -translate-y-1/2 rounded-full border border-white/48 bg-white/20 p-3 shadow-lg backdrop-blur-[7px] transition-colors duration-200 hover:bg-white/50 focus:ring-2 focus:ring-white/50 focus:outline-none'
+        aria-label='Previous blog post'
         type='button'
       >
         <ChevronLeft className='h-5 w-5 text-white' />
       </button>
       <button
         onClick={nextSlide}
-        className='absolute top-1/2 -right-4 z-30 h-[48px] w-[48px] -translate-y-1/2 rounded-full border border-[rgba(255,255,255,0.48)] bg-[#FFFFFF33] p-3 shadow-lg backdrop-blur-[7px] transition-colors duration-200 hover:bg-[#ffffff88]'
-        aria-label='Next blog'
+        className='absolute top-1/2 -right-4 z-30 h-[48px] w-[48px] -translate-y-1/2 rounded-full border border-white/48 bg-white/20 p-3 shadow-lg backdrop-blur-[7px] transition-colors duration-200 hover:bg-white/50 focus:ring-2 focus:ring-white/50 focus:outline-none'
+        aria-label='Next blog post'
         type='button'
       >
         <ChevronRight className='h-5 w-5 text-white' />
       </button>
 
-      {/* Pagination Indicators */}
-      <div className='mt-10 flex items-center justify-center gap-2'>
-        {items.map((_, index) => (
+      <div
+        className='mt-10 flex items-center justify-center gap-2'
+        role='tablist'
+        aria-label='Blog post navigation'
+      >
+        {items.map((_: CardStackItem, index: number) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`leading-[145%] font-medium transition-all duration-300 ${
+            className={`rounded leading-[145%] font-medium transition-all duration-300 focus:ring-2 focus:ring-white/50 focus:outline-none ${
               index === currentIndex
                 ? 'text-white'
                 : 'text-[#787878] hover:text-[#9A9A9A]'
             }`}
-            aria-label={`Go to slide ${index + 1}`}
+            aria-label={`Go to blog post ${index + 1}`}
+            role='tab'
+            aria-selected={index === currentIndex}
             type='button'
           >
             {String(index + 1).padStart(2, '0')}
@@ -248,11 +255,11 @@ const CardStack: React.FC<CardStackProps> = ({
         ))}
       </div>
 
-      {/* Read More Link */}
       <div className='text-center'>
         <Link
-          className='mt-8 flex items-center justify-center gap-2 text-center font-medium text-white'
+          className='mt-8 flex items-center justify-center gap-2 text-center font-medium text-white transition-colors hover:text-gray-300'
           href='/blog'
+          aria-label='Read more blog articles'
         >
           <span className='underline'>Read More Articles</span>
           <ArrowRight className='h-4 w-4' />
@@ -262,10 +269,9 @@ const CardStack: React.FC<CardStackProps> = ({
   );
 };
 
-const BlogSection: React.FC = () => {
+const BlogSection = () => {
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if mobile on mount and resize
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
@@ -276,7 +282,6 @@ const BlogSection: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Transform blog data to CardStack format
   const cardStackItems: CardStackItem[] = useMemo(
     () =>
       mockBlogs.map(blog => ({
@@ -289,14 +294,19 @@ const BlogSection: React.FC = () => {
   );
 
   return (
-    <section className='relative h-full w-full px-6 py-5 md:px-12 md:py-16 lg:px-[100px]'>
-      {/* Header */}
+    <section
+      className='relative h-full w-full px-6 py-5 md:px-12 md:py-16 lg:px-[100px]'
+      aria-labelledby='blog-heading'
+    >
       <header className='mb-16 flex items-end justify-between'>
         <div className='max-w-[628px]'>
           <h3 className='gradient-text text-center text-sm leading-[120%] tracking-[-0.64px] md:text-left md:leading-[160%] md:font-medium md:tracking-[-0.48px]'>
             From the Blog
           </h3>
-          <h2 className='mt-3 text-center text-[32px] leading-[140%] tracking-[0.48px] text-white md:text-left md:text-[48px]'>
+          <h2
+            id='blog-heading'
+            className='mt-3 text-center text-[32px] leading-[140%] tracking-[0.48px] text-white md:text-left md:text-[48px]'
+          >
             Ideas that shape the future
           </h2>
           <p className='gradient-text-2 mt-3 max-w-[550px] text-center text-base leading-[160%] tracking-[-0.48px] md:text-left'>
@@ -306,8 +316,9 @@ const BlogSection: React.FC = () => {
         </div>
         <div className='hidden items-end justify-end md:flex'>
           <Link
-            className='flex items-center gap-2 font-medium text-white'
+            className='flex items-center gap-2 font-medium text-white transition-colors hover:text-gray-300'
             href='/blog'
+            aria-label='Read more blog articles'
           >
             <span className='underline'>Read More Articles</span>
             <ArrowRight className='h-4 w-4' />
@@ -315,15 +326,20 @@ const BlogSection: React.FC = () => {
         </div>
       </header>
 
-      {/* Content */}
       {isMobile ? (
         <div className='flex justify-center'>
           <CardStack items={cardStackItems} offset={20} scaleFactor={0.1} />
         </div>
       ) : (
-        <div className='grid w-full max-w-none grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-3'>
+        <div
+          className='grid w-full max-w-none grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-3'
+          role='list'
+          aria-label='Blog posts grid'
+        >
           {mockBlogs.map(blog => (
-            <BlogCard key={blog.id} blog={blog} />
+            <div key={blog.id} role='listitem'>
+              <BlogCard blog={blog} />
+            </div>
           ))}
         </div>
       )}
