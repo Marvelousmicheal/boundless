@@ -61,8 +61,8 @@ const ImageSlider = () => {
   };
 
   return (
-    <div className='flex relative min-h-[500px] max-w-[800px] mx-auto items-center'>
-      <div className='relative w-full h-[400px]'>
+    <div className='relative mx-auto flex min-h-[500px] max-w-[800px] items-center'>
+      <div className='relative h-[400px] w-full'>
         {aboutTimelineData.map((item, index) => {
           const position = getPosition(index);
           const { img, year, title, subTitle, backgroundImage } = item;
@@ -76,7 +76,7 @@ const ImageSlider = () => {
                 duration: 0.6,
                 ease: 'easeInOut',
               }}
-              className='absolute inset-0 flex justify-center items-center'
+              className='absolute inset-0 flex items-center justify-center'
               style={{
                 width: '450px',
                 left: '50%',
@@ -98,20 +98,20 @@ const ImageSlider = () => {
       {/* Left and Right button */}
       <button
         onClick={prev}
-        className='absolute backdrop-blur-[7px] bg-[rgba(255,255,255,0.60)] left-32 border border-white/48  top-1/2 -translate-y-1/2  rounded-full p-2 shadow-lg transition-colors z-10'
+        className='absolute top-1/2 left-32 z-10 -translate-y-1/2 rounded-full border border-white/48 bg-[rgba(255,255,255,0.60)] p-2 shadow-lg backdrop-blur-[7px] transition-colors'
       >
-        <ChevronLeft className='w-6 h-6 text-white' />
+        <ChevronLeft className='h-6 w-6 text-white' />
       </button>
 
       <button
         onClick={next}
-        className='absolute right-24 border border-white/48 top-1/2 -translate-y-1/2 bg-white/60 hover:bg-white/30 rounded-full p-2 shadow-lg transition-colors z-10'
+        className='absolute top-1/2 right-24 z-10 -translate-y-1/2 rounded-full border border-white/48 bg-white/60 p-2 shadow-lg transition-colors hover:bg-white/30'
       >
-        <ChevronRight className='w-6 h-6 text-white' />
+        <ChevronRight className='h-6 w-6 text-white' />
       </button>
 
       {/* Progress Bar and Number */}
-      <div className='absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center'>
+      <div className='absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center'>
         {aboutTimelineData.map((_, index) => (
           <div key={index} className='flex items-center'>
             <button

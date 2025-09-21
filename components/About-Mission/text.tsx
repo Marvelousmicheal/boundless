@@ -38,12 +38,12 @@ export default function MissionText() {
     'to empower anyone, anywhere, to transform bold ideas into impactful projects with transparency, community, and accountability at the core.';
 
   return (
-    <div className='flex flex-col justify-center items-center text-center px-6 max-w-[34rem] md:w-[80%] md:h-full sm:w-full sm:h-full sm:text-lg'>
+    <div className='flex max-w-[34rem] flex-col items-center justify-center px-6 text-center sm:h-full sm:w-full sm:text-lg md:h-full md:w-[80%]'>
       <h2
         ref={containerRef}
-        className='text-xl sm:text-3xl md:text-2xl leading-relaxed'
+        className='text-xl leading-relaxed sm:text-3xl md:text-2xl'
       >
-        <span className='text-white mr-1 underline underline-offset-4 decoration-white'>
+        <span className='mr-1 text-white underline decoration-white underline-offset-4'>
           {firstPhrase}
         </span>
         {rest.split(' ').map((word, wordIndex) => (
@@ -51,7 +51,7 @@ export default function MissionText() {
             {Array.from(word).map((char, charIndex) => (
               <span
                 key={`${wordIndex}-${charIndex}`}
-                className='char inline-block whitespace-pre text-gray-400 underline underline-offset-4 decoration-transparent'
+                className='char inline-block whitespace-pre text-gray-400 underline decoration-transparent underline-offset-4'
               >
                 {char}
               </span>

@@ -116,10 +116,10 @@ export default function LandingPage() {
 
   if (hasRedirected) {
     return (
-      <div className='flex items-center justify-center min-h-screen bg-black'>
+      <div className='flex min-h-screen items-center justify-center bg-black'>
         <div className='text-center'>
           <LoadingSpinner />
-          <p className='text-white text-lg'>Redirecting to waitlist...</p>
+          <p className='text-lg text-white'>Redirecting to waitlist...</p>
         </div>
       </div>
     );
@@ -130,7 +130,7 @@ export default function LandingPage() {
       <BeamBackground />
       <div
         ref={contentRef}
-        className='relative z-10 space-y-[23px] md:space-y-[80px] max-w-[1300px] mx-auto'
+        className='relative z-10 mx-auto max-w-[1300px] space-y-[23px] md:space-y-[80px]'
       >
         <Hero />
         <WhyBoundless />

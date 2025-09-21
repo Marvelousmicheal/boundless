@@ -128,14 +128,14 @@ const BackedBy = () => {
 
   return (
     <div
-      className='w-full h-full md:py-16 py-5 px-6 md:px-12 lg:px-[100px] relative'
+      className='relative h-full w-full px-6 py-5 md:px-12 md:py-16 lg:px-[100px]'
       id='backed-by'
     >
-      <div className='mx-auto relative max-w-[1200px]'>
-        <h2 className='text-white text-3xl md:text-4xl lg:text-[48px] leading-[140%] tracking-[0.48px] text-center'>
+      <div className='relative mx-auto max-w-[1200px]'>
+        <h2 className='text-center text-3xl leading-[140%] tracking-[0.48px] text-white md:text-4xl lg:text-[48px]'>
           Backed By trusted partners
         </h2>
-        <p className='text-[#B5B5B5] text-center text-sm md:text-base mt-2 md:mt-4'>
+        <p className='mt-2 text-center text-sm text-[#B5B5B5] md:mt-4 md:text-base'>
           <Link href={socialLinks.x} className='text-white underline'>
             Follow us on X
           </Link>{' '}
@@ -148,7 +148,7 @@ const BackedBy = () => {
       </div>
 
       {/* Logos */}
-      <div className='grid grid-cols-2 md:grid-cols-4 justify-center items-center gap-6 mx-auto max-w-[872px] my-11'>
+      <div className='mx-auto my-11 grid max-w-[872px] grid-cols-2 items-center justify-center gap-6 md:grid-cols-4'>
         {backedBy.map(item => (
           <Link href={item.url} key={item.name}>
             <Image
@@ -156,7 +156,7 @@ const BackedBy = () => {
               alt={item.name}
               width={100}
               height={100}
-              className='h-auto w-full  object-contain'
+              className='h-auto w-full object-contain'
             />
           </Link>
         ))}
@@ -165,7 +165,7 @@ const BackedBy = () => {
       {/* Scrolling Testimonials */}
       <div
         ref={containerRef}
-        className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-hidden max-h-[600px] md:max-h-[550px] relative'
+        className='relative grid max-h-[600px] grid-cols-1 gap-6 overflow-hidden md:max-h-[550px] md:grid-cols-2 lg:grid-cols-3'
         style={{
           willChange: 'transform',
           backfaceVisibility: 'hidden',
@@ -174,14 +174,14 @@ const BackedBy = () => {
       >
         {/* Gradient overlays */}
         <div
-          className='absolute -top-3 left-0 w-full h-[150px] z-10 pointer-events-none'
+          className='pointer-events-none absolute -top-3 left-0 z-10 h-[150px] w-full'
           style={{
             background:
               'linear-gradient(0deg, rgba(3, 3, 3, 0.00) 32.3%, #030303 84.8%)',
           }}
         />
         <div
-          className='absolute -bottom-3 left-0 w-full h-[150px] z-10 pointer-events-none'
+          className='pointer-events-none absolute -bottom-3 left-0 z-10 h-[150px] w-full'
           style={{
             background:
               'linear-gradient(180deg, rgba(3, 3, 3, 0.00) 32.3%, #030303 84.8%)',
@@ -200,7 +200,7 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='Boundless gave our team the confidence to launch. The milestone-based funding kept us accountable every step of the way.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
           <CommentCard
             avatarSrc='/globe.svg'
@@ -208,14 +208,14 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='The milestone-based escrow changed everything. Backers trusted us because they knew funds would only unlock on real progress. That accountability made our campaign stronger.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
         </div>
 
         {/* Column 2 */}
         <div
           ref={column2Ref}
-          className='flex flex-col gap-6 -translate-y-1/2'
+          className='flex -translate-y-1/2 flex-col gap-6'
           style={{ willChange: 'transform' }}
         >
           <CommentCard
@@ -224,7 +224,7 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='It feels like the future of crowdfunding.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
           <CommentCard
             avatarSrc='/globe.svg'
@@ -232,7 +232,7 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='Raising funds on Boundless was simple, transparent, and faster than I imagined.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
           <CommentCard
             avatarSrc='/globe.svg'
@@ -240,7 +240,7 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='Every startup needs this kind of system.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
         </div>
 
@@ -256,7 +256,7 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='Community voting gave us early validation before launch. It felt amazing to know backers believed in our vision from day one.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
           <CommentCard
             avatarSrc='/globe.svg'
@@ -264,7 +264,7 @@ const BackedBy = () => {
             name='David'
             username='david'
             content='Before Boundless, raising funds was overwhelming. Now, I can focus on building while the platform handles trust and transparency.'
-            icon={<Linkedin className='w-4 h-4 text-white' />}
+            icon={<Linkedin className='h-4 w-4 text-white' />}
           />
         </div>
       </div>

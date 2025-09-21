@@ -13,10 +13,10 @@ export function Footer() {
   ];
 
   return (
-    <footer className='bg-black border-t border-gray-800'>
-      <div className='max-w py-8 px- sm:px- lg:px-'>
+    <footer className='border-t border-gray-800 bg-black'>
+      <div className='max-w px- sm:px- lg:px- py-8'>
         {/* Desktop Layout */}
-        <div className='hidden md:flex justify-between items-start'>
+        <div className='hidden items-start justify-between md:flex'>
           {/* Left side - Logo and Copyright */}
           <div className='flex flex-col space-y-4'>
             <Image
@@ -24,9 +24,9 @@ export function Footer() {
               alt='Boundless'
               width={120}
               height={40}
-              className='w-14 mb-14'
+              className='mb-14 w-14'
             />
-            <div className='text-gray-400 text-sm'>
+            <div className='text-sm text-gray-400'>
               © {currentYear} Boundless — Transparent, Community-Driven,
               Web3-Native Funding.
             </div>
@@ -35,16 +35,16 @@ export function Footer() {
           {/* Right side - Links and Social Icons */}
           <div className='flex flex-col items-end space-y-6'>
             {/* Policy Links */}
-            <div className='flex space-x-8 mb-14'>
+            <div className='mb-14 flex space-x-8'>
               <Link
                 href='/terms'
-                className='text-gray-400 hover:text-white text-sm transition-colors'
+                className='text-sm text-gray-400 transition-colors hover:text-white'
               >
                 Terms of Service
               </Link>
               <Link
                 href='/privacy'
-                className='text-gray-400 hover:text-white text-sm transition-colors'
+                className='text-sm text-gray-400 transition-colors hover:text-white'
               >
                 Privacy Policy
               </Link>
@@ -57,26 +57,26 @@ export function Footer() {
                   <Link
                     key={social.name}
                     href={social.href}
-                    className='hover:opacity-80 transition-opacity'
+                    className='transition-opacity hover:opacity-80'
                   >
                     <Image
                       src={social.icon}
                       alt={social.name}
                       width={24}
                       height={24}
-                      className='w-6 h-6'
+                      className='h-6 w-6'
                     />
                   </Link>
-                  <div className='bg-[#2B2B2B] w-0.5 h-6'></div>
+                  <div className='h-6 w-0.5 bg-[#2B2B2B]'></div>
                 </>
               ))}
-              <Link href='#' className='hover:opacity-80 transition-opacity'>
+              <Link href='#' className='transition-opacity hover:opacity-80'>
                 <Image
                   src='/footer/gmail.svg'
                   alt='gmail'
                   width={24}
                   height={24}
-                  className='w-24 h-6'
+                  className='h-6 w-24'
                 />
               </Link>
             </div>
@@ -84,7 +84,7 @@ export function Footer() {
         </div>
 
         {/* Mobile Layout */}
-        <div className='md:hidden flex flex-col items-center space-y-6'>
+        <div className='flex flex-col items-center space-y-6 md:hidden'>
           {/* Logo */}
           <Image
             src='/footer/logo.svg'
@@ -98,13 +98,13 @@ export function Footer() {
           <div className='flex space-x-8'>
             <Link
               href='/terms'
-              className='text-gray-400 hover:text-white text-sm transition-colors'
+              className='text-sm text-gray-400 transition-colors hover:text-white'
             >
               Terms of Service
             </Link>
             <Link
               href='/privacy'
-              className='text-gray-400 hover:text-white text-sm transition-colors'
+              className='text-sm text-gray-400 transition-colors hover:text-white'
             >
               Privacy Policy
             </Link>
@@ -117,32 +117,32 @@ export function Footer() {
                 <Link
                   key={social.name}
                   href={social.href}
-                  className='hover:opacity-80 transition-opacity'
+                  className='transition-opacity hover:opacity-80'
                 >
                   <Image
                     src={social.icon}
                     alt={social.name}
                     width={24}
                     height={24}
-                    className='w-6 h-6'
+                    className='h-6 w-6'
                   />
                 </Link>
-                <div className='bg-[#2B2B2B] w-0.5 h-6'></div>
+                <div className='h-6 w-0.5 bg-[#2B2B2B]'></div>
               </>
             ))}
-            <Link href='#' className='hover:opacity-80 transition-opacity'>
+            <Link href='#' className='transition-opacity hover:opacity-80'>
               <Image
                 src='/footer/gmail.svg'
                 alt='gmail'
                 width={24}
                 height={24}
-                className='w-24 h-6'
+                className='h-6 w-24'
               />
             </Link>
           </div>
 
           {/* Copyright */}
-          <div className='text-gray-400 text-sm text-center'>
+          <div className='text-center text-sm text-gray-400'>
             © {currentYear} Boundless — Transparent,
             <br />
             Community-Driven, Web3-Native Funding.

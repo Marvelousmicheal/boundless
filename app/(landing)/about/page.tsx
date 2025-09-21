@@ -18,7 +18,7 @@ const AboutPage = () => {
   return (
     <section>
       <AboutUsHero />
-      <div className='relative z-10 space-y-[23px] md:space-y-[80px] max-w-[1300px] mx-auto'>
+      <div className='relative z-10 mx-auto max-w-[1300px] space-y-[23px] md:space-y-[80px]'>
         <Missionpage />
         <AboutUsDifferent />
         <Timeline />

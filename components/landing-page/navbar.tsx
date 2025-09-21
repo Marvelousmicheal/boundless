@@ -135,10 +135,10 @@ export function Navbar() {
   return (
     <nav
       ref={navbarRef}
-      className='sticky top-0 z-50 max-h-[88px]  -mt-11 bg-[#030303A3] blur-s[12px]'
+      className='blur-s[12px] sticky top-0 z-50 -mt-11 max-h-[88px] bg-[#030303A3]'
     >
-      <div className='py-5 lg:px-[100px] md:px-[50px] px-5'>
-        <div className='flex gap- justify-between items-center'>
+      <div className='px-5 py-5 md:px-[50px] lg:px-[100px]'>
+        <div className='gap- flex items-center justify-between'>
           <div className='flex-shrink-0'>
             <Link
               ref={logoRef}
@@ -156,7 +156,7 @@ export function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className='text-white hover:text-white/80 px-3 py-2 rounded-md md:text-xs lg:text-sm font-medium transition-colors'
+                  className='rounded-md px-3 py-2 font-medium text-white transition-colors hover:text-white/80 md:text-xs lg:text-sm'
                 >
                   {item.label}
                 </Link>
@@ -294,9 +294,9 @@ function MobileMenu() {
         <SheetContent
           showCloseButton={false}
           side='top'
-          className='pt-8 px-9 pb-16'
+          className='px-9 pt-8 pb-16'
         >
-          <div className='flex justify-between items-center'>
+          <div className='flex items-center justify-between'>
             <div className='flex-shrink-0'>
               <Link ref={mobileLogoRef} href='/' className='flex items-center'>
                 <Image
@@ -309,7 +309,7 @@ function MobileMenu() {
             </div>
             <SheetClose>
               <BoundlessButton variant='outline'>
-                <XIcon className='w-5 h-5' />
+                <XIcon className='h-5 w-5' />
               </BoundlessButton>
             </SheetClose>
           </div>
@@ -318,7 +318,7 @@ function MobileMenu() {
               <Link
                 key={item.href}
                 href={item.href}
-                className='text-white hover:text-white/80 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                className='rounded-md px-3 py-2 text-sm font-medium text-white transition-colors hover:text-white/80'
               >
                 {item.label}
               </Link>

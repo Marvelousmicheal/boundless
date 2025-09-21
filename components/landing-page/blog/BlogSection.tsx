@@ -180,9 +180,9 @@ const CardStack: React.FC<CardStackProps> = ({
   );
 
   return (
-    <div className='relative w-full max-w-sm mx-auto'>
+    <div className='relative mx-auto w-full max-w-sm'>
       {/* Cards Container */}
-      <div className='relative h-80 w-full flex justify-center items-center'>
+      <div className='relative flex h-80 w-full items-center justify-center'>
         {items.map((card, index) => {
           const { xPosition, scale, zIndex, opacity } =
             calculateCardPosition(index);
@@ -190,7 +190,7 @@ const CardStack: React.FC<CardStackProps> = ({
           return (
             <motion.div
               key={card.id}
-              className='absolute bg-[#101010] w-full max-w-sm rounded-[8px] p-0 shadow-xl border border-[#1B1B1B] overflow-hidden flex flex-col'
+              className='absolute flex w-full max-w-sm flex-col overflow-hidden rounded-[8px] border border-[#1B1B1B] bg-[#101010] p-0 shadow-xl'
               style={{
                 transformOrigin: 'center center',
               }}
@@ -214,28 +214,28 @@ const CardStack: React.FC<CardStackProps> = ({
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className='absolute -left-4 top-1/2 -translate-y-1/2 z-30 h-[48px] w-[48px] border border-[rgba(255,255,255,0.48)] bg-[#FFFFFF33] hover:bg-[#ffffff88] rounded-full p-3 transition-colors duration-200 shadow-lg backdrop-blur-[7px]'
+        className='absolute top-1/2 -left-4 z-30 h-[48px] w-[48px] -translate-y-1/2 rounded-full border border-[rgba(255,255,255,0.48)] bg-[#FFFFFF33] p-3 shadow-lg backdrop-blur-[7px] transition-colors duration-200 hover:bg-[#ffffff88]'
         aria-label='Previous blog'
         type='button'
       >
-        <ChevronLeft className='w-5 h-5 text-white' />
+        <ChevronLeft className='h-5 w-5 text-white' />
       </button>
       <button
         onClick={nextSlide}
-        className='absolute -right-4 top-1/2 -translate-y-1/2 z-30 h-[48px] w-[48px] border border-[rgba(255,255,255,0.48)] bg-[#FFFFFF33] hover:bg-[#ffffff88] rounded-full p-3 transition-colors duration-200 shadow-lg backdrop-blur-[7px]'
+        className='absolute top-1/2 -right-4 z-30 h-[48px] w-[48px] -translate-y-1/2 rounded-full border border-[rgba(255,255,255,0.48)] bg-[#FFFFFF33] p-3 shadow-lg backdrop-blur-[7px] transition-colors duration-200 hover:bg-[#ffffff88]'
         aria-label='Next blog'
         type='button'
       >
-        <ChevronRight className='w-5 h-5 text-white' />
+        <ChevronRight className='h-5 w-5 text-white' />
       </button>
 
       {/* Pagination Indicators */}
-      <div className='flex justify-center items-center gap-2 mt-10'>
+      <div className='mt-10 flex items-center justify-center gap-2'>
         {items.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`font-medium leading-[145%] transition-all duration-300 ${
+            className={`leading-[145%] font-medium transition-all duration-300 ${
               index === currentIndex
                 ? 'text-white'
                 : 'text-[#787878] hover:text-[#9A9A9A]'
@@ -251,11 +251,11 @@ const CardStack: React.FC<CardStackProps> = ({
       {/* Read More Link */}
       <div className='text-center'>
         <Link
-          className='text-white font-medium flex justify-center items-center text-center gap-2 mt-8'
+          className='mt-8 flex items-center justify-center gap-2 text-center font-medium text-white'
           href='/blog'
         >
           <span className='underline'>Read More Articles</span>
-          <ArrowRight className='w-4 h-4' />
+          <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
     </div>
@@ -289,28 +289,28 @@ const BlogSection: React.FC = () => {
   );
 
   return (
-    <section className='w-full h-full md:py-16 py-5 px-6 md:px-12 lg:px-[100px] relative'>
+    <section className='relative h-full w-full px-6 py-5 md:px-12 md:py-16 lg:px-[100px]'>
       {/* Header */}
-      <header className='flex justify-between items-end mb-16'>
+      <header className='mb-16 flex items-end justify-between'>
         <div className='max-w-[628px]'>
-          <h3 className='gradient-text text-sm text-center md:text-left md:font-medium leading-[120%] md:leading-[160%] tracking-[-0.64px] md:tracking-[-0.48px]'>
+          <h3 className='gradient-text text-center text-sm leading-[120%] tracking-[-0.64px] md:text-left md:leading-[160%] md:font-medium md:tracking-[-0.48px]'>
             From the Blog
           </h3>
-          <h2 className='text-white text-[32px] md:text-[48px] text-center md:text-left leading-[140%] tracking-[0.48px] mt-3'>
+          <h2 className='mt-3 text-center text-[32px] leading-[140%] tracking-[0.48px] text-white md:text-left md:text-[48px]'>
             Ideas that shape the future
           </h2>
-          <p className='gradient-text-2 text-base leading-[160%] tracking-[-0.48px] text-center md:text-left max-w-[550px] mt-3'>
+          <p className='gradient-text-2 mt-3 max-w-[550px] text-center text-base leading-[160%] tracking-[-0.48px] md:text-left'>
             Discover stories, tips, and updates on crowdfunding, grants, and
             Web3. Learn from builders and backers driving real impact.
           </p>
         </div>
-        <div className='justify-end items-end hidden md:flex'>
+        <div className='hidden items-end justify-end md:flex'>
           <Link
-            className='text-white font-medium flex items-center gap-2'
+            className='flex items-center gap-2 font-medium text-white'
             href='/blog'
           >
             <span className='underline'>Read More Articles</span>
-            <ArrowRight className='w-4 h-4' />
+            <ArrowRight className='h-4 w-4' />
           </Link>
         </div>
       </header>
@@ -321,7 +321,7 @@ const BlogSection: React.FC = () => {
           <CardStack items={cardStackItems} offset={20} scaleFactor={0.1} />
         </div>
       ) : (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full max-w-none'>
+        <div className='grid w-full max-w-none grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-3'>
           {mockBlogs.map(blog => (
             <BlogCard key={blog.id} blog={blog} />
           ))}

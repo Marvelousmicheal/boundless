@@ -83,21 +83,21 @@ function ProjectCard({
   const deadlineInfo = getDeadlineInfo();
 
   return (
-    <main className='w-[397px] flex flex-col gap-4 p-5 rounded-[8px] bg-[#030303] border border-gray-900 font-inter hover:bg-primary/5 hover:border-primary/25 cursor-pointer'>
+    <main className='font-inter hover:bg-primary/5 hover:border-primary/25 flex w-[397px] cursor-pointer flex-col gap-4 rounded-[8px] border border-gray-900 bg-[#030303] p-5'>
       <header className='flex items-center justify-between'>
         <main className='flex items-center gap-2'>
           <div
             style={{ backgroundImage: `url(${creatorLogo})` }}
             className='size-6 rounded-full bg-white bg-cover bg-center'
           ></div>
-          <h4 className='font-normal text-sm text-gray-500'>{creatorName}</h4>
+          <h4 className='text-sm font-normal text-gray-500'>{creatorName}</h4>
         </main>
         <main className='flex items-center gap-3'>
-          <div className='w-[63px]  px-1 py-0.5 rounded-[4px] bg-office-brown border border-office-brown-darker text-office-brown-darker font-semibold text-xs flex items-center justify-center '>
+          <div className='bg-office-brown border-office-brown-darker text-office-brown-darker flex w-[63px] items-center justify-center rounded-[4px] border px-1 py-0.5 text-xs font-semibold'>
             Category
           </div>
           <div
-            className={`px-1 py-0.5 rounded-[4px] ${getStatusStyles()} border font-semibold text-xs flex items-center justify-center `}
+            className={`rounded-[4px] px-1 py-0.5 ${getStatusStyles()} flex items-center justify-center border text-xs font-semibold`}
           >
             {status}
           </div>
@@ -106,14 +106,14 @@ function ProjectCard({
       <article className='flex items-center gap-5'>
         <main
           style={{ backgroundImage: `url(${projectImage})` }}
-          className='bg-white w-[79.41px] h-[90px] rounded-[8px] bg-cover bg-center'
+          className='h-[90px] w-[79.41px] rounded-[8px] bg-white bg-cover bg-center'
         ></main>
-        <main className='flex flex-col gap-2 w-[257px]'>
-          <h2 className='font-semibold text-base text-white text-left'>
+        <main className='flex w-[257px] flex-col gap-2'>
+          <h2 className='text-left text-base font-semibold text-white'>
             {projectTitle}
           </h2>
-          <div className='relative h-[60px] group'>
-            <p className='font-normal text-sm text-white text-left line-clamp-3 cursor-pointer group-hover:absolute group-hover:z-10 group-hover:bg-[#030303] group-hover:rounded-md group-hover:line-clamp-none group-hover:w-full'>
+          <div className='group relative h-[60px]'>
+            <p className='line-clamp-3 cursor-pointer text-left text-sm font-normal text-white group-hover:absolute group-hover:z-10 group-hover:line-clamp-none group-hover:w-full group-hover:rounded-md group-hover:bg-[#030303]'>
               {projectDescription}
             </p>
           </div>
@@ -122,25 +122,25 @@ function ProjectCard({
       <footer className='flex flex-col gap-2'>
         <main className='flex items-center justify-between'>
           {status === 'Validation' && votes && (
-            <h3 className='font-medium text-sm text-[#f5f5f5]'>
+            <h3 className='text-sm font-medium text-[#f5f5f5]'>
               {formatNumber(votes.current)}/{formatNumber(votes.goal)}{' '}
               <span className='text-gray-500'>Votes</span>
             </h3>
           )}
           {status === 'Funding' && funding && (
-            <h3 className='font-medium text-sm text-[#f5f5f5]'>
+            <h3 className='text-sm font-medium text-[#f5f5f5]'>
               {formatNumber(funding.current)}/{formatNumber(funding.goal)}{' '}
               <span className='text-gray-500'>{funding.currency} raised</span>
             </h3>
           )}
           {(status === 'Funded' || status === 'Completed') && milestones && (
-            <h3 className='font-medium text-sm text-[#f5f5f5]'>
+            <h3 className='text-sm font-medium text-[#f5f5f5]'>
               {milestones.current}/{milestones.goal}{' '}
               <span className='text-gray-500'>Milestones Submitted</span>
             </h3>
           )}
 
-          <h3 className={`font-medium text-sm ${deadlineInfo.className}`}>
+          <h3 className={`text-sm font-medium ${deadlineInfo.className}`}>
             {deadlineInfo.text}
           </h3>
         </main>
@@ -159,7 +159,7 @@ function ProjectCard({
                     ? (milestones.current / milestones.goal) * 100
                     : 0
             }
-            className='w-[357px] h-2 rounded-full'
+            className='h-2 w-[357px] rounded-full'
           />
         </div>
       </footer>

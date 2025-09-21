@@ -6,7 +6,7 @@ type TimelineLayoutProps = {
 
 const TimelineLayout = ({ children }: TimelineLayoutProps) => {
   return (
-    <main className='flex flex-col gap-8 overflow-hidden justify-center items-center px-5 relative min-h-screen'>
+    <main className='relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-5'>
       {children}
     </main>
   );

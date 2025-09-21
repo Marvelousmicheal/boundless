@@ -84,18 +84,18 @@ export default function Hero() {
 
   return (
     <div
-      className='min-h-screen h-screen flex items-stretch md:items-end justify-between pb-[36] md:pb-[66px] md:mx-[116px] mx-5 relative '
+      className='relative mx-5 flex h-screen min-h-screen items-stretch justify-between pb-[36] md:mx-[116px] md:items-end md:pb-[66px]'
       id='hero'
     >
       <div
         ref={heroRef}
-        className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full mt-[-80px] z-10'
+        className='absolute top-1/2 left-1/2 z-10 mt-[-80px] h-full w-full -translate-x-1/2 -translate-y-1/2'
       >
         <Image
           src='/sphere.svg'
           alt='glow'
           unoptimized
-          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[508px] h-[369px] z-10 sphere-image'
+          className='sphere-image absolute top-1/2 left-1/2 z-10 h-[369px] w-[508px] -translate-x-1/2 -translate-y-1/2'
           width={1920}
           height={1080}
           quality={100}
@@ -104,7 +104,7 @@ export default function Hero() {
           src='/glow.svg'
           alt='glow'
           unoptimized
-          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  h-full z-10 glow-element !max-w-screen !w-screen'
+          className='glow-element absolute top-1/2 left-1/2 z-10 h-full !w-screen !max-w-screen -translate-x-1/2 -translate-y-1/2'
           width={1920}
           height={1080}
         />
@@ -112,7 +112,7 @@ export default function Hero() {
           src='/elipse.svg'
           alt='glow'
           unoptimized
-          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] z-10 ellipse-image'
+          className='ellipse-image absolute top-1/2 left-1/2 z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2'
           width={1920}
           height={1080}
         />
@@ -124,16 +124,16 @@ export default function Hero() {
           }}
         /> */}
       </div>
-      <div className='flex flex-col md:flex-row justify-between items-end gap-4 h-full w-full md:h-auto mt-[120px] z-10'>
-        <h2 className='text-left text-white xl:text-[48px] lg:text-[32px] text-[30px] leading-[140%] md:max-w-[579px] max-w-[350px]'>
+      <div className='z-10 mt-[120px] flex h-full w-full flex-col items-end justify-between gap-4 md:h-auto md:flex-row'>
+        <h2 className='max-w-[350px] text-left text-[30px] leading-[140%] text-white md:max-w-[579px] lg:text-[32px] xl:text-[48px]'>
           Validate Ideas, <br /> Fund Bold Projects, <br />{' '}
           <span className='gradient-text font-medium'>
             Unlock Boundless Potential
           </span>
         </h2>
-        <div className='md:max-w-[466px] relative bottom-[150px] md:bottom-0'>
+        <div className='relative bottom-[150px] md:bottom-0 md:max-w-[466px]'>
           <p
-            className='text-white xl:text-[16px] lg:text-[14px] text-[14px] leading-[150%]'
+            className='text-[14px] leading-[150%] text-white lg:text-[14px] xl:text-[16px]'
             style={{
               background: 'linear-gradient(93deg, #B5B5B5 15.93%, #FFF 97.61%)',
               backgroundClip: 'text',
@@ -145,7 +145,7 @@ export default function Hero() {
             and scaling ideas through community crowdfunding, grants, and
             hackathons built on Stellar.
           </p>
-          <div className='flex flex-col md:flex-row items-center gap-4 mt-7'>
+          <div className='mt-7 flex flex-col items-center gap-4 md:flex-row'>
             <BoundlessButton variant='default' size='xl' fullWidth>
               Explore Projects
             </BoundlessButton>

@@ -150,9 +150,9 @@ const Timeline = () => {
     <TimelineLayout>
       {/* Heading with Top Right SVG */}
       <div className='relative w-full'>
-        <div className='flex flex-col gap-1 text-center relative z-10'>
+        <div className='relative z-10 flex flex-col gap-1 text-center'>
           <p
-            className='text-sm leading-[140%] tracking-[-0.64px] text-transparent bg-clip-text font-medium'
+            className='bg-clip-text text-sm leading-[140%] font-medium tracking-[-0.64px] text-transparent'
             style={{
               backgroundImage:
                 'linear-gradient(273deg, rgba(167, 249, 80, 0.50) 13.84%, #3AE6B2 73.28%)',
@@ -165,7 +165,7 @@ const Timeline = () => {
           </p>
           <h1
             ref={titleRef}
-            className='font-normal text-white text-[48px] leading-[120%] tracking-[-2%]'
+            className='text-[48px] leading-[120%] font-normal tracking-[-2%] text-white'
           >
             Our Journey
           </h1>
@@ -178,7 +178,7 @@ const Timeline = () => {
       {/* Cards mobile */}
       <div
         ref={timelineRef}
-        className='flex flex-col md:flex-row gap-8 md:hidden px-4'
+        className='flex flex-col gap-8 px-4 md:hidden md:flex-row'
       >
         {aboutTimelineData.map((item, index) => {
           const { img, year, title, subTitle, backgroundImage } = item;
@@ -217,7 +217,7 @@ const Timeline = () => {
       </div>
 
       {/* Bottom SVG */}
-      <div className='relative w-full flex justify-center'>
+      <div className='relative flex w-full justify-center'>
         <BottomLeftSvg svgRefs={svgRefs} />
       </div>
     </TimelineLayout>
