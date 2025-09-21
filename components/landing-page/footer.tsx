@@ -147,20 +147,6 @@ export function Footer() {
                 )}
               </div>
             ))}
-            <div className='ml-4 h-6 w-0.5 bg-[#2B2B2B]' aria-hidden='true' />
-            <Link
-              href={`mailto:${socialLinks.gmail}`}
-              className='rounded transition-opacity hover:opacity-80 focus:ring-2 focus:ring-white/50 focus:outline-none'
-              aria-label='Contact us via email'
-            >
-              <Image
-                src='/footer/gmail.svg'
-                alt='Email contact'
-                width={24}
-                height={24}
-                className='h-6 w-6'
-              />
-            </Link>
           </nav>
 
           <p className='text-center text-sm text-gray-400'>
