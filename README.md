@@ -164,17 +164,20 @@ Before you begin, ensure you have the following installed:
    - This creates a copy of the repository in your GitHub account
 
 2. **Clone your fork:**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/boundless-frontend.git
    cd boundless-frontend
    ```
 
 3. **Add upstream remote:**
+
    ```bash
    git remote add upstream https://github.com/boundlessfi/boundless-frontend.git
    ```
 
 4. **Install dependencies:**
+
    ```bash
    npm install
    # or
@@ -183,29 +186,32 @@ Before you begin, ensure you have the following installed:
 
 5. **Configure environment variables:**
    Create a `.env.local` file in the root directory:
+
    ```bash
    touch .env.local
    ```
-   
+
    Fill in the required environment variables in `.env.local`:
+
    ```env
    # NextAuth Configuration
    NEXTAUTH_SECRET=your-secret-key
    NEXTAUTH_URL=http://localhost:3000
-   
+
    # Google OAuth (optional)
    GOOGLE_CLIENT_ID=your-google-client-id
    GOOGLE_CLIENT_SECRET=your-google-client-secret
-   
+
    # API Configuration
    NEXT_PUBLIC_API_URL=http://localhost:8000/api
-   
+
    # Stellar Configuration
    NEXT_PUBLIC_STELLAR_NETWORK=testnet
    NEXT_PUBLIC_APP_URL=http://localhost:3000
    ```
 
 6. **Run the development server:**
+
    ```bash
    npm run dev
    # or
