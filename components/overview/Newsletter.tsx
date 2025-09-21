@@ -25,7 +25,7 @@ import { BoundlessButton } from '../buttons';
 import { Input } from '../ui/input';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { addToWaitlist } from '@/lib/api/waitlist';
+import { newsletterSubscribe } from '@/lib/api/waitlist';
 import { Button } from '../ui/button';
 
 const formSchema = z.object({
@@ -84,18 +84,9 @@ const Newsletter = ({
     setIsSubmitting(true);
 
     try {
-      // Split name into firstName and lastName, handling edge cases
-      const nameParts = values.name
-        .trim()
-        .split(' ')
-        .filter(part => part.length > 0);
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-
-      await addToWaitlist({
+      await newsletterSubscribe({
         email: values.email,
-        firstName,
-        lastName,
+        name: values.name,
       });
     } catch {
       setError('Failed to submit form. Please try again.');

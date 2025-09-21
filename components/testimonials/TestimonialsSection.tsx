@@ -7,6 +7,7 @@ import { BoundlessButton } from '../buttons';
 import { gsap } from 'gsap';
 import TestimonialCard from './TestimonialCard';
 import Image from 'next/image';
+import Newsletter from '../overview/Newsletter';
 
 type TestimonialsWallProps = {
   testimonials: Testimonial[];
@@ -19,7 +20,7 @@ export default function TestimonialsSection({
   const columnRefs = useRef<HTMLDivElement[]>([]);
   const animations = useRef<gsap.core.Tween[]>([]);
   const [numColumns, setNumColumns] = useState<number>(4);
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     animations.current.forEach(anim => anim.kill());
     animations.current = [];
@@ -48,10 +49,16 @@ export default function TestimonialsSection({
       });
       wrapper.appendChild(cloneContainer);
 
-      gsap.set(wrapper, { y: 0, force3D: true, willChange: 'transform' });
+      const isEvenColumn = index % 2 === 0;
+      const initialY = isEvenColumn ? 0 : -totalHeight;
+      gsap.set(wrapper, {
+        y: initialY,
+        force3D: true,
+        willChange: 'transform',
+      });
 
       const anim = gsap.to(wrapper, {
-        y: -totalHeight,
+        y: isEvenColumn ? -totalHeight : 0,
         duration: 60,
         ease: 'none',
         repeat: -1,
@@ -205,7 +212,7 @@ export default function TestimonialsSection({
             </div>
           </div>
 
-          <div className='absolute lg:bottom-[60px] bottom-14  lg:mt-0 mt-20 left-1/2 -translate-x-1/2 md:max-h-[212px] w-[90%] max-w-6xl bg-primary rounded-xl shadow-lg p-8 md:p-12 text-black z-40'>
+          <div className='absolute lg:bottom-[60px] bottom-14  lg:mt-0 mt-20 left-1/2 -translate-x-1/2 md:max-h-[212px] w-full max-w-[90vw] bg-primary rounded-xl shadow-lg p-8 md:p-12 text-black z-40'>
             <div className='flex flex-col md:flex-row items-center md:justify-between gap-6'>
               <div>
                 <h2 className='text-3xl lg:text-5xl font-medium tracking-[-1.92px] leading-[100%] md:text-left text-center mb-2'>
@@ -233,6 +240,7 @@ export default function TestimonialsSection({
                     fullWidth
                     className='bg-transparent border border-black'
                     aria-label='Subscribe for updates'
+                    onClick={() => setOpen(true)}
                   >
                     Subscribe for Updates
                   </BoundlessButton>
@@ -242,6 +250,7 @@ export default function TestimonialsSection({
           </div>
         </div>
       </div>
+      <Newsletter open={open} onOpenChange={setOpen} />
     </section>
   );
 }

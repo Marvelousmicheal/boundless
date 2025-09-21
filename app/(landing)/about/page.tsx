@@ -24,8 +24,8 @@ const AboutPage = () => {
         <Timeline />
         <OurTeam />
         <Partners />
-        <TestimonialsSection testimonials={testimonials} />
       </div>
+      <TestimonialsSection testimonials={testimonials} />
     </section>
   );
 };
