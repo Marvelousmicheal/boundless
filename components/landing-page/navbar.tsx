@@ -154,8 +154,8 @@ export function Navbar() {
       <div className='px-5 py-5 md:px-[50px] lg:px-[100px]'>
         <div
           className={cn(
-            'grid grid-cols-[auto_1fr_auto] items-center justify-items-center',
-            isAuthenticated && 'justify-items-start'
+            'grid grid-cols-2 items-center md:grid-cols-[auto_1fr_auto] md:justify-items-center',
+            isAuthenticated && 'md:justify-items-start'
           )}
         >
           <div className='flex-shrink-0'>
@@ -393,7 +393,7 @@ function MobileMenu({
   };
 
   return (
-    <div ref={mobileMenuRef} className='md:hidden'>
+    <div ref={mobileMenuRef} className='justify-self-end md:hidden'>
       <Sheet
         onOpenChange={open => {
           if (open) {
