@@ -36,9 +36,9 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
         </div>
       </CardHeader>
 
-      <CardContent className='flex-1 border-b border-[#2B2B2B] px-3 py-3 pb-8'>
+      <CardContent className='flex-1 border-b border-[#2B2B2B] px-4 pt-4 pb-5'>
         <div className='mb-3 flex items-center justify-between text-xs leading-[145%] text-[#b5b5b5] sm:text-sm'>
-          <span className='inline-block rounded-[8px] bg-[#A7F95014] px-2.5 py-2 text-sm font-medium text-[#A7F950]'>
+          <span className='inline-block rounded-[8px] bg-[#A7F95014] px-2.5 py-1 text-sm font-medium text-[#A7F950]'>
             {blog.category}
           </span>
           <span className='font-normal'>{blog.date}</span>
@@ -51,7 +51,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
         </p>
       </CardContent>
 
-      <CardFooter className='mt-auto px-5 pt-6 pb-5'>
+      <CardFooter className='mt-auto px-5 pt-5 pb-4'>
         <Link
           href={`/blog/${blog.slug}`}
           className='flex w-full items-center justify-end gap-2 text-right text-sm font-medium text-[#A7F950]'

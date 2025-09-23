@@ -89,7 +89,7 @@ export default function Hero({ className = '' }: HeroProps) {
         aria-hidden='true'
       >
         <LooperSVG />
-        <Image
+        {/* <Image
           src='/glow.svg'
           alt=''
           className='glow-element absolute top-1/2 left-1/2 z-10 h-full w-screen max-w-screen -translate-x-1/2 -translate-y-1/2 opacity-80'
@@ -98,7 +98,7 @@ export default function Hero({ className = '' }: HeroProps) {
           priority
           quality={85}
           sizes='100vw'
-        />
+        /> */}
         <Image
           src='/elipse.svg'
           alt=''
@@ -120,11 +120,11 @@ export default function Hero({ className = '' }: HeroProps) {
 
       <div
         ref={contentRef}
-        className='z-30 mt-[120px] flex h-full w-full flex-col justify-between gap-4 md:h-auto md:flex-row md:items-end'
+        className='z-30 mt-[120px] mb-10 flex h-full w-full flex-col justify-between gap-4 md:h-auto md:flex-row md:items-end'
       >
         <h1
           id='hero-heading'
-          className='max-w-[350px] text-left text-[30px] leading-[140%] text-white sm:max-w-full md:max-w-[579px] lg:text-[32px] xl:text-[48px]'
+          className='max-w-[350px] text-left text-[30px] leading-[140%] text-white sm:max-w-full md:max-w-[579px] lg:text-[32px] xl:text-[40px]'
         >
           Validate Ideas, <br /> Fund Bold Projects, <br />{' '}
           <span className='gradient-text font-medium'>
