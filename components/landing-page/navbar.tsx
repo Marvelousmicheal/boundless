@@ -208,7 +208,6 @@ export function Navbar() {
   );
 }
 
-// Authenticated navigation component
 function AuthenticatedNav({ user }: { user: any }) {
   const { logout } = useZustandAuth(false);
 
