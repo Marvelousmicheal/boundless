@@ -4,11 +4,12 @@ import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
+import ProjectCard from './project/ProjectCard';
 
-interface Projects {
+interface ExploreProject {
   id: string;
   daysToDeadline?: number;
-  status: string;
+  status: 'Validation' | 'Funding' | 'Funded' | 'Completed';
   projectImg: string;
   currentAmount?: number;
   targetAmount?: number;
@@ -17,9 +18,14 @@ interface Projects {
   milestonesCompleted?: number;
   totalMilestones?: number;
   milestonesRejected?: number;
+  creatorName: string;
+  creatorLogo: string;
+  projectImage: string;
+  projectTitle: string;
+  projectDescription: string;
 }
 
-const projects: Projects[] = [
+const projects: ExploreProject[] = [
   {
     id: '1',
     status: 'Validation',
@@ -27,6 +33,12 @@ const projects: Projects[] = [
     targetVotes: 100,
     daysToDeadline: 43,
     projectImg: '/landing/explore/project-placeholder-1.png',
+    creatorName: 'Alice Johnson',
+    creatorLogo: '/landing/explore/creator-1.png',
+    projectImage: '/landing/explore/project-placeholder-1.png',
+    projectTitle: 'DeFi Protocol Innovation',
+    projectDescription:
+      'Building the next generation of decentralized finance protocols with enhanced security and efficiency.',
   },
   {
     id: '2',
@@ -35,6 +47,12 @@ const projects: Projects[] = [
     targetAmount: 300000,
     daysToDeadline: 15,
     projectImg: '/landing/explore/project-placeholder-2.png',
+    creatorName: 'Bob Smith',
+    creatorLogo: '/landing/explore/creator-2.png',
+    projectImage: '/landing/explore/project-placeholder-2.png',
+    projectTitle: 'NFT Marketplace Platform',
+    projectDescription:
+      'Creating a comprehensive NFT marketplace with advanced trading features and community tools.',
   },
   {
     id: '3',
@@ -43,6 +61,12 @@ const projects: Projects[] = [
     totalMilestones: 6,
     milestonesRejected: 1,
     projectImg: '/landing/explore/project-placeholder-3.png',
+    creatorName: 'Carol Davis',
+    creatorLogo: '/landing/explore/creator-3.png',
+    projectImage: '/landing/explore/project-placeholder-3.png',
+    projectTitle: 'Blockchain Education Platform',
+    projectDescription:
+      'Educational platform for blockchain technology with interactive courses and certifications.',
   },
   {
     id: '4',
@@ -51,6 +75,12 @@ const projects: Projects[] = [
     totalMilestones: 6,
     daysToDeadline: 3,
     projectImg: '/landing/explore/project-placeholder-4.png',
+    creatorName: 'David Wilson',
+    creatorLogo: '/landing/explore/creator-4.png',
+    projectImage: '/landing/explore/project-placeholder-4.png',
+    projectTitle: 'DAO Governance Tool',
+    projectDescription:
+      'Advanced governance tools for decentralized autonomous organizations with voting mechanisms.',
   },
   {
     id: '5',
@@ -59,6 +89,12 @@ const projects: Projects[] = [
     targetAmount: 300000,
     daysToDeadline: 15,
     projectImg: '/landing/explore/project-placeholder-2.png',
+    creatorName: 'Eva Brown',
+    creatorLogo: '/landing/explore/creator-5.png',
+    projectImage: '/landing/explore/project-placeholder-2.png',
+    projectTitle: 'Web3 Social Network',
+    projectDescription:
+      'Decentralized social networking platform with user-owned data and content monetization.',
   },
   {
     id: '6',
@@ -67,6 +103,12 @@ const projects: Projects[] = [
     targetVotes: 100,
     daysToDeadline: 43,
     projectImg: '/landing/explore/project-placeholder-1.png',
+    creatorName: 'Frank Miller',
+    creatorLogo: '/landing/explore/creator-6.png',
+    projectImage: '/landing/explore/project-placeholder-1.png',
+    projectTitle: 'Cross-Chain Bridge Protocol',
+    projectDescription:
+      'Secure and efficient cross-chain bridge for seamless asset transfers between blockchains.',
   },
 ];
 
@@ -90,58 +132,6 @@ export default function Explore() {
       });
     }
   }, [activeTab]);
-
-  const getProgressInfo = (project: Projects) => {
-    if (project.status === 'Validation') {
-      return {
-        current: project.currentVotes,
-        total: project.targetVotes,
-        unit: 'Votes',
-        percentage:
-          project.currentVotes && project.targetVotes
-            ? (project.currentVotes / project.targetVotes) * 100
-            : 0,
-      };
-    }
-
-    if (project.status === 'Funding') {
-      return {
-        current:
-          project.currentAmount && project.targetAmount
-            ? `${project.currentAmount / 1000}k/${project.targetAmount / 1000} USDC`
-            : 'N/A',
-        total: null,
-        unit: 'Raised',
-        percentage:
-          project.currentAmount && project.targetAmount
-            ? (project.currentAmount / project.targetAmount) * 100
-            : 0,
-      };
-    }
-
-    if (project.status === 'Completed') {
-      return {
-        current: project.milestonesCompleted,
-        total: project.totalMilestones,
-        unit: 'Milestones Submitted',
-        percentage:
-          project.milestonesCompleted && project.totalMilestones
-            ? (project.milestonesCompleted / project.totalMilestones) * 100
-            : 0,
-        rejected: project.milestonesRejected,
-      };
-    }
-
-    return {
-      current: project.milestonesCompleted,
-      total: project.totalMilestones,
-      unit: 'Milestones Submitted',
-      percentage:
-        project.milestonesCompleted && project.totalMilestones
-          ? (project.milestonesCompleted / project.totalMilestones) * 100
-          : 0,
-    };
-  };
 
   return (
     <section className='relative flex flex-col items-center justify-center text-white'>
@@ -177,107 +167,44 @@ export default function Explore() {
         </div>
       </div>
 
-      <div className='mt-10 grid w-full max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-2 md:px-6 lg:grid-cols-3 xl:px-0'>
-        {projects.map(project => {
-          const progressInfo = getProgressInfo(project);
-
-          return (
-            <div
-              className='max-w-md space-y-5 rounded-xl border border-[#2B2B2B] bg-[#030303] p-4'
-              key={project.id}
-            >
-              {/* Top */}
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-2'>
-                  <Image
-                    src='/landing/explore/profile-head.svg'
-                    alt='Profile Head'
-                    width={24}
-                    height={24}
-                    className='aspect-auto rounded-full'
-                  />
-                  <p className='text-sm text-[#B5B5B5]'>Creator Name</p>
-                </div>
-
-                <div className='flex items-center gap-2'>
-                  <p className='rounded-sm border border-[#645D5D] bg-[#E4DBDB] p-1 text-xs font-semibold text-[#645D5D]'>
-                    Category
-                  </p>
-                  <p
-                    className={cn(
-                      'rounded-sm border border-[#99FF2D] bg-[#A7F950]/8 p-1 text-xs font-semibold text-[#36F94D]',
-                      project.status === 'Validation' &&
-                        'border-[#AD6F07] bg-[#FBE2B7] text-[#AD6F07]',
-                      project.status === 'Funding' &&
-                        'border-[#034592] bg-[#C6DDF7] text-[#034592]',
-                      project.status === 'Completed' &&
-                        'border-[#04802E] bg-[#B5E3C4] text-[#04802E]'
-                    )}
-                  >
-                    {project.status}
-                  </p>
-                </div>
-              </div>
-
-              {/* Middle */}
-              <div className='flex gap-4'>
-                <Image
-                  src={project.projectImg}
-                  alt='Project Image'
-                  width={80}
-                  height={90}
-                  className='aspect-square rounded-lg'
-                />
-                <div className='space-y-2'>
-                  <p className='font-semibold'>Bitmed</p>
-                  <p className='text-sm'>
-                    To build a secure, transparent, and trusted digital health
-                    ecosystem powered by Sonic blockchain for 280M lives in
-                    Indonesia.
-                  </p>
-                </div>
-              </div>
-
-              {/* Bottom */}
-              <div className='flex flex-col space-y-2'>
-                <div className='flex items-center justify-between'>
-                  <p className='flex items-center gap-1 text-sm'>
-                    <span>
-                      {progressInfo.total
-                        ? `${progressInfo.current}/${progressInfo.total}`
-                        : progressInfo.current}
-                    </span>
-                    <span className='text-xs text-[#B5B5B5]'>
-                      {progressInfo.unit}
-                    </span>
-                  </p>
-                  {project.daysToDeadline && (
-                    <p
-                      className={cn(
-                        'text-sm',
-                        project.daysToDeadline >= 40 && 'text-[#5FC381]',
-                        project.daysToDeadline < 40 && 'text-[#F5B546]',
-                        project.daysToDeadline < 10 && 'text-[#E26E6A]'
-                      )}
-                    >
-                      {project.daysToDeadline} days to deadline
-                    </p>
-                  )}
-                  {progressInfo.rejected && (
-                    <p className='text-sm text-[#E26E6A]'>
-                      {progressInfo.rejected} milestones rejected
-                    </p>
-                  )}
-                </div>
-                <progress
-                  value={progressInfo.percentage || 0}
-                  max={100}
-                  className='h-3 w-full rounded-full [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-[#A7F950]/8 [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-gradient-to-r [&::-webkit-progress-value]:from-[#A7F950]/30 [&::-webkit-progress-value]:to-[#A7F950]'
-                ></progress>
-              </div>
-            </div>
-          );
-        })}
+      <div className='mt-10 grid w-fit grid-cols-1 gap-6 px-4 md:grid-cols-2 md:px-6 lg:grid-cols-3 xl:px-0'>
+        {projects.map(project => (
+          <ProjectCard
+            key={project.id}
+            deadlineInDays={project.daysToDeadline || 0}
+            votes={
+              project.currentVotes && project.targetVotes
+                ? {
+                    current: project.currentVotes,
+                    goal: project.targetVotes,
+                  }
+                : undefined
+            }
+            funding={
+              project.currentAmount && project.targetAmount
+                ? {
+                    current: project.currentAmount,
+                    goal: project.targetAmount,
+                    currency: 'USDC',
+                  }
+                : undefined
+            }
+            milestones={
+              project.milestonesCompleted && project.totalMilestones
+                ? {
+                    current: project.milestonesCompleted,
+                    goal: project.totalMilestones,
+                  }
+                : undefined
+            }
+            status={project.status}
+            creatorName={project.creatorName}
+            creatorLogo={project.creatorLogo}
+            projectImage={project.projectImage}
+            projectTitle={project.projectTitle}
+            projectDescription={project.projectDescription}
+          />
+        ))}
       </div>
 
       {/* Footer */}
