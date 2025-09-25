@@ -1,8 +1,15 @@
 'use client';
 import Link from 'next/link';
-import { Menu, XIcon, Plus, ChevronDown, Building2 } from 'lucide-react';
+import {
+  Menu,
+  XIcon,
+  Plus,
+  ChevronDown,
+  Building2,
+  ArrowUpRight,
+} from 'lucide-react';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { BoundlessButton } from '../buttons';
@@ -21,6 +28,7 @@ import {
 import { User, LogOut, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import WalletConnectButton from '../wallet/WalletConnectButton';
+import CreateProjectModal from './project/CreateProjectModal';
 
 gsap.registerPlugin(useGSAP);
 
@@ -48,7 +56,7 @@ export function Navbar() {
       );
 
       const logoHover = gsap.to(logoRef.current, {
-        scale: 1.02,
+        scale: 1,
         duration: 0.2,
         ease: 'power2.out',
         paused: true,
@@ -71,7 +79,6 @@ export function Navbar() {
       menuItems?.forEach(item => {
         const hoverTl = gsap.timeline({ paused: true });
         hoverTl.to(item, {
-          y: -1,
           duration: 0.2,
           ease: 'power2.out',
         });
@@ -91,7 +98,7 @@ export function Navbar() {
       });
 
       const ctaHover = gsap.to(ctaRef.current, {
-        scale: 1.01,
+        scale: 1,
         duration: 0.2,
         ease: 'power2.out',
         paused: true,
@@ -219,13 +226,43 @@ function AuthenticatedNav({
   } | null;
 }) {
   const { logout } = useAuthActions();
-
+  const [createProjectModalOpen, setCreateProjectModalOpen] = useState(false);
   return (
     <div className='flex items-center space-x-3'>
       <WalletConnectButton />
-      <BoundlessButton>
-        <Plus className='h-4 w-4' />
-      </BoundlessButton>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <BoundlessButton className='hover:!text-primary tr bg-transparent text-white hover:bg-transparent'>
+            <Plus className='h-4 w-4' />
+          </BoundlessButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align='end'
+          className='bg-background w-[300px] rounded-[8px] border border-[#2B2B2B] pt-3 pb-6 text-white shadow-[0_4px_4px_0_rgba(26,26,26,0.25)]'
+        >
+          <DropdownMenuItem
+            onClick={() => setCreateProjectModalOpen(true)}
+            className='group hover:text-primary px-6 py-3.5 text-white hover:!bg-transparent'
+          >
+            <span className='group-hover:text-primary flex w-full items-center justify-between'>
+              Add Project
+              <Plus className='group-hover:text-primary h-4 w-4' />
+            </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className='group hover:text-primary px-6 py-3.5 text-white hover:!bg-transparent'>
+            <span className='group-hover:text-primary flex w-full items-center justify-between'>
+              Host Hackathon
+              <ArrowUpRight className='group-hover:text-primary h-4 w-4' />
+            </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className='group hover:text-primary px-6 py-3.5 text-white hover:!bg-transparent'>
+            <span className='group-hover:text-primary flex w-full items-center justify-between'>
+              Create Grant
+              <ArrowUpRight className='group-hover:text-primary h-4 w-4' />
+            </span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -236,17 +273,24 @@ function AuthenticatedNav({
                 alt={user?.name || user?.profile?.firstName || ''}
               />
               <AvatarFallback>
-                {user?.name?.charAt(0) ||
+                {/* {user?.name?.charAt(0) ||
                   user?.profile?.firstName?.charAt(0) ||
                   user?.email?.charAt(0) ||
-                  'U'}
+                  'U'} */}
+                <Image
+                  src='https://i.pravatar.cc/150?img=10'
+                  alt='logo'
+                  width={116}
+                  height={22}
+                  className='h-full w-full object-cover'
+                />
               </AvatarFallback>
             </Avatar>
             <ChevronDown className='h-5 w-5 text-white' />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className='bg-background w-[350px] rounded-[8px] border border-[#2B2B2B] p-0 text-white shadow-[0_4px_4px_0_rgba(26,26,26,0.25)]'
+          className='bg-background w-[350px] rounded-[8px] border border-[#2B2B2B] p-0 !text-white shadow-[0_4px_4px_0_rgba(26,26,26,0.25)]'
           align='end'
           forceMount
         >
@@ -264,34 +308,53 @@ function AuthenticatedNav({
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator className='h-[0.5px] bg-[#2B2B2B]' />
-          <DropdownMenuItem className='px-6 py-3.5 pt-3' asChild>
-            <Link href='/profile' className='flex items-center'>
-              <User className='teext-white mr-2 h-4 w-4' />
+          <DropdownMenuItem
+            className='group hover:!text-primary cursor-pointer px-6 py-3.5 pt-3 hover:!bg-transparent'
+            asChild
+          >
+            <Link
+              href='/profile'
+              className='group-hover:!text-primary flex items-center'
+            >
+              <User className='teext-white group-hover:!text-primary mr-2 h-4 w-4 text-white' />
               Profile
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className='px-6 py-3.5' asChild>
-            <Link href='/organizations' className='flex items-center'>
-              <Building2 className='mr-2 h-4 w-4 text-white' />
+          <DropdownMenuItem
+            className='group hover:!text-primary cursor-pointer px-6 py-3.5 hover:!bg-transparent'
+            asChild
+          >
+            <Link
+              href='/organizations'
+              className='group-hover:text-primary flex items-center'
+            >
+              <Building2 className='group-hover:!text-primary mr-2 h-4 w-4 text-white' />
               Organizations
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className='px-6 py-3.5 pb-6' asChild>
+          <DropdownMenuItem
+            className='group hover:!text-primary cursor-pointer px-6 py-3.5 pb-6 hover:!bg-transparent'
+            asChild
+          >
             <Link href='/settings' className='flex items-center'>
-              <Settings className='mr-2 h-4 w-4 text-white' />
+              <Settings className='group-hover:!text-primary mr-2 h-4 w-4 text-white' />
               Settings
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator className='h-[0.5px] bg-[#2B2B2B]' />
           <DropdownMenuItem
             onClick={() => logout()}
-            className='flex items-center px-6 pt-3 pb-6 text-red-600'
+            className='group flex cursor-pointer items-center px-6 pt-3 pb-6 text-red-600 hover:!bg-transparent hover:!text-red-700'
           >
-            <LogOut className='mr-2 h-4 w-4 text-white' />
+            <LogOut className='mr-2 h-4 w-4 text-red-600 group-hover:!text-red-700' />
             Sign Out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <CreateProjectModal
+        open={createProjectModalOpen}
+        setOpen={setCreateProjectModalOpen}
+      />
     </div>
   );
 }
@@ -316,7 +379,7 @@ function MobileMenu({
   const mobileMenuItemsRef = useRef<HTMLDivElement>(null);
   const mobileCTARef = useRef<HTMLDivElement>(null);
   const { logout } = useAuthActions();
-
+  const [createProjectModalOpen, setCreateProjectModalOpen] = useState(false);
   useGSAP(
     () => {
       gsap.fromTo(
@@ -326,7 +389,7 @@ function MobileMenu({
       );
 
       const buttonHover = gsap.to(mobileButtonRef.current, {
-        scale: 1.02,
+        scale: 1,
         duration: 0.2,
         ease: 'power2.out',
         paused: true,
@@ -552,6 +615,10 @@ function MobileMenu({
           </div>
         </SheetContent>
       </Sheet>
+      <CreateProjectModal
+        open={createProjectModalOpen}
+        setOpen={setCreateProjectModalOpen}
+      />
     </div>
   );
 }
