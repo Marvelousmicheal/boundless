@@ -9,14 +9,19 @@ import Image from 'next/image';
 import React from 'react';
 import { BlogPost } from '@/lib/data/blog';
 
-const BlogCard = ({ post }: { post: BlogPost }) => {
+interface BlogCardProps {
+  post: BlogPost;
+  onCardClick?: (slug: string) => void;
+}
+
+const BlogCard = ({ post, onCardClick }: BlogCardProps) => {
   return (
     <Card
       key={post.id}
-      className='max-w-noneflex h-full w-full flex-col gap-0 overflow-hidden rounded-[8px] border-[#1B1B1B] bg-[#101010] p-0 transition-colors duration-300 hover:border-[#2A2A2A]'
+      className='flex h-full w-full max-w-none flex-col gap-0 overflow-hidden rounded-[8px] border-[#1B1B1B] bg-[#101010] p-0 transition-colors duration-300 hover:border-[#2A2A2A]'
     >
       <CardHeader className='relative p-0 !pb-0'>
-        <div className='h-[250px] w-full'>
+        <div className='h-[141px] w-full'>
           <Image
             src={post.image}
             alt={post.title}
@@ -27,7 +32,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
         </div>
       </CardHeader>
 
-      <CardContent className='flex-1 border-b border-[#2B2B2B] px-6 pt-6 pb-6'>
+      <CardContent className='flex-1 border-b border-[#2B2B2B] px-4 pt-4 pb-5'>
         <div className='mb-4 flex items-center justify-between text-sm leading-[145%] text-[#b5b5b5]'>
           <span className='inline-block rounded-[8px] bg-[#A7F95014] px-3 py-1.5 text-sm font-medium text-[#A7F950]'>
             {post.category}
@@ -42,10 +47,11 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
         </p>
       </CardContent>
 
-      <CardFooter className='mt-auto px-6 pt-6 pb-6'>
+      <CardFooter className='mt-auto px-4 pt-5 pb-4'>
         <Link
           href={`/blog/${post.slug}`}
           className='flex w-full items-center justify-end gap-2 text-right text-base font-medium text-[#A7F950]'
+          onClick={() => onCardClick?.(post.slug)}
         >
           Continue reading
           <Image

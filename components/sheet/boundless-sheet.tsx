@@ -83,7 +83,7 @@ const BoundlessSheet: React.FC<BoundlessSheetProps> = ({
 
       return {
         side: 'bottom' as const,
-        className: `${widthClass} mx-auto rounded-none min-h-[400px] !max-h-[95vh] px-0 ${maxWidth}`,
+        className: `${widthClass} mx-auto rounded-t-[14px] min-h-[400px] !max-h-[95vh] px-0 ${maxWidth}`,
         closeButtonPosition: 'top-6 right-6',
         maxHeight: '80vh',
       };

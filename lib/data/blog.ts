@@ -160,13 +160,13 @@ At Boundless, we're committed to making crowdfunding better for everyone. Our va
 > "The best validation is the one that protects everyone while enabling innovation." - Boundless Team
 
 Ready to launch your validated project? [Get started today](/auth/signup) and join thousands of creators who are building the future with Boundless.`,
-    image: '/funding.png',
+    image: '/blog3.jpg',
     date: '29 Jul, 2025',
     slug: 'milestone-based-funding-future-crowdfunding',
     category: 'Category',
     author: {
       name: 'Sarah Chen',
-      avatar: '/team/avatar1.jpg',
+      avatar: '/admin.png',
       bio: 'Product Manager at Boundless with 8+ years in fintech and crowdfunding.',
     },
     tags: ['Crowdfunding', 'Validation', 'Trust', 'Web3'],
@@ -351,7 +351,7 @@ At Boundless, we're committed to leading this transformation. Join us in buildin
     category: 'Web3',
     author: {
       name: 'Alex Rodriguez',
-      avatar: '/team/avatar2.jpg',
+      avatar: '/admin.png',
       bio: 'Blockchain researcher and Web3 advocate with expertise in decentralized systems.',
     },
     tags: ['Web3', 'Blockchain', 'Decentralization', 'Crowdfunding'],
@@ -663,7 +663,7 @@ The key is to start with clear values, implement appropriate systems, and contin
     category: 'Community',
     author: {
       name: 'Maria Santos',
-      avatar: '/team/avatar3.jpg',
+      avatar: '/admin.png',
       bio: 'Community manager and Web3 researcher focused on decentralized governance and trust mechanisms.',
     },
     tags: ['Community', 'Trust', 'Governance', 'Web3'],
@@ -695,7 +695,7 @@ Security is paramount in decentralized crowdfunding. This comprehensive guide co
     category: 'Category',
     author: {
       name: 'David Kim',
-      avatar: '/team/avatar4.jpg',
+      avatar: '/admin.png',
       bio: 'Blockchain security expert with 10+ years in smart contract auditing.',
     },
     tags: ['Security', 'Smart Contracts', 'Crowdfunding'],
@@ -726,7 +726,7 @@ Understanding the psychological factors that influence backing decisions can hel
     category: 'Category',
     author: {
       name: 'Lisa Wang',
-      avatar: '/team/avatar5.jpg',
+      avatar: '/admin.png',
       bio: 'Behavioral economist specializing in crowdfunding psychology.',
     },
     tags: ['Psychology', 'Marketing', 'Crowdfunding'],
@@ -757,7 +757,7 @@ Learn the key principles behind successful grant programs and how to design them
     category: 'Category',
     author: {
       name: 'Michael Torres',
-      avatar: '/team/avatar6.jpg',
+      avatar: '/admin.png',
       bio: 'Grant program designer with experience in both traditional and Web3 funding.',
     },
     tags: ['Grants', 'Funding', 'Program Design'],
@@ -784,7 +784,7 @@ Learn how to leverage community feedback and participation to create better prod
     category: 'Category',
     author: {
       name: 'Anna Patel',
-      avatar: '/team/avatar7.jpg',
+      avatar: '/admin.png',
       bio: 'Community manager and product strategist focused on user-driven development.',
     },
     tags: ['Community', 'Development', 'Product Strategy'],
@@ -811,7 +811,7 @@ Discover how well-designed token economics can enhance crowdfunding platforms an
     category: 'Category',
     author: {
       name: 'James Wilson',
-      avatar: '/team/avatar8.jpg',
+      avatar: '/admin.png',
       bio: 'Tokenomics expert and economist specializing in Web3 incentive design.',
     },
     tags: ['Tokenomics', 'Economics', 'Incentives'],
@@ -842,7 +842,7 @@ Learn how cross-chain technology is enabling projects to accept funding from mul
     category: 'Category',
     author: {
       name: 'Elena Rodriguez',
-      avatar: '/team/avatar9.jpg',
+      avatar: '/admin.png',
       bio: 'Blockchain engineer specializing in cross-chain interoperability solutions.',
     },
     tags: ['Cross-Chain', 'Interoperability', 'Blockchain'],
@@ -873,7 +873,7 @@ Navigate the complex regulatory landscape surrounding Web3 funding and learn how
     category: 'Category',
     author: {
       name: 'Robert Chen',
-      avatar: '/team/avatar10.jpg',
+      avatar: '/admin.png',
       bio: 'Regulatory compliance expert specializing in Web3 and fintech regulations.',
     },
     tags: ['Regulation', 'Compliance', 'Web3'],
@@ -900,7 +900,7 @@ Explore how artificial intelligence is revolutionizing the way projects are matc
     category: 'Category',
     author: {
       name: 'Dr. Sarah Johnson',
-      avatar: '/team/avatar11.jpg',
+      avatar: '/admin.png',
       bio: 'AI researcher and machine learning engineer focused on recommendation systems.',
     },
     tags: ['AI', 'Machine Learning', 'Matching'],
@@ -927,7 +927,7 @@ Discover innovative funding models that promote long-term sustainability for cre
     category: 'Category',
     author: {
       name: 'Dr. Maria Gonzalez',
-      avatar: '/team/avatar12.jpg',
+      avatar: '/admin.png',
       bio: 'Sustainability economist and funding model researcher.',
     },
     tags: ['Sustainability', 'Funding Models', 'Long-term'],
@@ -958,7 +958,7 @@ Decentralized finance is revolutionizing how crowdfunding platforms operate, off
     category: 'Category',
     author: {
       name: 'Dr. Kevin Park',
-      avatar: '/team/avatar13.jpg',
+      avatar: '/admin.png',
       bio: 'DeFi researcher and protocol architect with expertise in yield farming and liquidity provision.',
     },
     tags: ['DeFi', 'Yield Farming', 'Liquidity'],
@@ -985,7 +985,7 @@ NFTs are transforming how creators reward their backers, offering unique digital
     category: 'Category',
     author: {
       name: 'Sophie Chen',
-      avatar: '/team/avatar14.jpg',
+      avatar: '/admin.png',
       bio: 'NFT strategist and digital art curator specializing in utility-based token design.',
     },
     tags: ['NFTs', 'Digital Rewards', 'Ownership'],
@@ -1012,7 +1012,7 @@ Expanding across multiple blockchain networks can significantly increase your pr
     category: 'Category',
     author: {
       name: 'Alex Thompson',
-      avatar: '/team/avatar15.jpg',
+      avatar: '/admin.png',
       bio: 'Blockchain strategist with experience in cross-chain protocol development and community building.',
     },
     tags: ['Multi-Chain', 'Strategy', 'Community'],
@@ -1043,7 +1043,7 @@ Governance tokens are empowering communities to have a direct say in funding dec
     category: 'Category',
     author: {
       name: 'Rachel Green',
-      avatar: '/team/avatar16.jpg',
+      avatar: '/admin.png',
       bio: 'Governance expert and DAO researcher focused on token-based decision making.',
     },
     tags: ['Governance', 'DAO', 'Democracy'],
@@ -1070,7 +1070,7 @@ Proper risk assessment is crucial for success in the dynamic world of Web3 crowd
     category: 'Category',
     author: {
       name: 'Dr. Michael Brown',
-      avatar: '/team/avatar17.jpg',
+      avatar: '/admin.png',
       bio: 'Risk management specialist with expertise in blockchain and cryptocurrency investments.',
     },
     tags: ['Risk Management', 'Assessment', 'Web3'],
@@ -1097,7 +1097,7 @@ Liquidity pools are revolutionizing how projects maintain continuous funding and
     category: 'Category',
     author: {
       name: 'David Lee',
-      avatar: '/team/avatar18.jpg',
+      avatar: '/admin.png',
       bio: 'Liquidity expert and AMM protocol developer with deep knowledge of automated market makers.',
     },
     tags: ['Liquidity', 'AMM', 'Price Discovery'],
@@ -1124,7 +1124,7 @@ Crowdfunding is becoming a powerful tool for driving social change and funding i
     category: 'Category',
     author: {
       name: 'Sarah Williams',
-      avatar: '/team/avatar19.jpg',
+      avatar: '/admin.png',
       bio: 'Social impact strategist and community development expert with experience in nonprofit funding.',
     },
     tags: ['Social Impact', 'Community', 'Change'],
@@ -1155,7 +1155,7 @@ Automated market making is providing new ways for projects to maintain liquidity
     category: 'Category',
     author: {
       name: 'Tom Anderson',
-      avatar: '/team/avatar20.jpg',
+      avatar: '/admin.png',
       bio: 'Market making specialist and algorithmic trading expert with focus on DeFi protocols.',
     },
     tags: ['Market Making', 'Automation', 'Liquidity'],
@@ -1186,7 +1186,7 @@ Staking is creating new ways to reward long-term supporters and align incentives
     category: 'Category',
     author: {
       name: 'Emma Davis',
-      avatar: '/team/avatar21.jpg',
+      avatar: '/admin.png',
       bio: 'Staking protocol designer and incentive mechanism researcher with expertise in token economics.',
     },
     tags: ['Staking', 'Incentives', 'Long-term'],
@@ -1217,7 +1217,7 @@ International crowdfunding presents unique challenges and opportunities for glob
     category: 'Category',
     author: {
       name: 'Dr. Lisa Zhang',
-      avatar: '/team/avatar22.jpg',
+      avatar: '/admin.png',
       bio: 'International finance expert and regulatory compliance specialist with global experience.',
     },
     tags: ['International', 'Compliance', 'Global'],
@@ -1248,7 +1248,7 @@ Fractional ownership is democratizing access to high-value investments through c
     category: 'Category',
     author: {
       name: 'Mark Johnson',
-      avatar: '/team/avatar23.jpg',
+      avatar: '/admin.png',
       bio: 'Investment strategist and fractional ownership expert with experience in real estate and alternative investments.',
     },
     tags: ['Fractional Ownership', 'Accessibility', 'Investment'],
@@ -1279,7 +1279,7 @@ Community collaboration is revolutionizing how due diligence is performed on cro
     category: 'Category',
     author: {
       name: 'Jennifer Martinez',
-      avatar: '/team/avatar24.jpg',
+      avatar: '/admin.png',
       bio: 'Due diligence specialist and community research coordinator with expertise in project evaluation.',
     },
     tags: ['Due Diligence', 'Community', 'Research'],
