@@ -479,7 +479,7 @@ function MobileMenu({
           }
         }}
       >
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <BoundlessButton
             ref={mobileButtonRef}
             variant='outline'
@@ -608,7 +608,7 @@ function MobileMenu({
                   />
                 </div>
                 <BoundlessButton size='xl' className='w-full' fullWidth>
-                  <Link href='/auth/signin'>Get Started</Link>
+                  <Link href='/auth'>Get Started</Link>
                 </BoundlessButton>
               </div>
             )}

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { BlogPost } from '@/lib/data/blog';
+import React, { useState, useCallback, Suspense } from 'react';
+import { BlogPost, getAllBlogPosts } from '@/lib/data/blog';
 import BlogCard from './BlogCard';
 import { Search, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,7 @@ const BlogGrid: React.FC<BlogGridProps> = ({
   const [isNavigating, setIsNavigating] = useState(false);
 
   // Get posts to display (no filtering)
-  const displayPosts = posts.slice(0, visiblePosts);
+  // const displayPosts = posts.slice(0, visiblePosts);
   const hasMorePosts = visiblePosts < posts.length;
 
   // Load more handler
@@ -113,15 +113,15 @@ const BlogGrid: React.FC<BlogGridProps> = ({
           </div>
         </div>
 
-        {/* Blog Grid */}
         <div className='mx-auto max-w-6xl px-6 py-12'>
-          <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'>
-            {displayPosts.map(post => (
-              <div key={post.id} className='w-full'>
-                <BlogCard post={post} onCardClick={handleCardClick} />
-              </div>
-            ))}
-          </div>
+          <Suspense
+            fallback={<AuthLoadingState message='Loading blog posts...' />}
+          >
+            <AsyncBlogGrid
+              handleCardClick={handleCardClick}
+              visiblePosts={visiblePosts}
+            />
+          </Suspense>
 
           {/* View More Button */}
           {showLoadMore && hasMorePosts && !isLoading && (
@@ -158,3 +158,22 @@ const BlogGrid: React.FC<BlogGridProps> = ({
 };
 
 export default BlogGrid;
+
+export const AsyncBlogGrid = async ({
+  handleCardClick,
+  visiblePosts,
+}: {
+  handleCardClick: (slug: string) => void;
+  visiblePosts: number | undefined;
+}) => {
+  const posts = await getAllBlogPosts();
+  return (
+    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'>
+      {posts.slice(0, visiblePosts).map(post => (
+        <div key={post.id} className='w-full' role='listitem'>
+          <BlogCard post={post} onCardClick={handleCardClick} />
+        </div>
+      ))}
+    </div>
+  );
+};
