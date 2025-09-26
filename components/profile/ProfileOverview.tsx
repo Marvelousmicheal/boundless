@@ -39,7 +39,7 @@ export default function ProfileOverview({ username }: ProfileOverviewProps) {
   ];
 
   return (
-    <article className='flex w-[500px] flex-col gap-11 text-white'>
+    <article className='flex w-full flex-col gap-11 text-white md:w-[500px]'>
       <ProfileHeader profile={mockProfile} />
       <UserStats stats={mockStats} />
       <OrganizationsList organizations={mockOrganizations} />
