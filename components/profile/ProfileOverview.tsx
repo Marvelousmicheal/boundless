@@ -1,8 +1,8 @@
 'use client';
 
 import ProfileHeader from './ProfileHeader';
-import UserStats from './UserStats';
 import OrganizationsList from './OrganizationsList';
+import { GetMeResponse } from '@/lib/api/types';
 import {
   UserProfile,
   UserStats as UserStatsType,
@@ -11,38 +11,39 @@ import {
 
 interface ProfileOverviewProps {
   username: string;
+  user: GetMeResponse;
 }
 
-export default function ProfileOverview({ username }: ProfileOverviewProps) {
-  const mockProfile: UserProfile = {
-    username: username,
-    displayName: 'Collins Odumeje',
-    bio: 'To build a secure, transparent, and trusted digital health ecosystem powered by Sonic blockchain for 280M lives in Indonesia.',
-    avatarUrl: '/team/45d9f6d1-7e6d-41c7-8b16-a045d36e835f.png',
-    socialLinks: {
-      twitter: 'https://twitter.com/boundless',
-      linkedin: 'https://linkedin.com/in/boundless',
-      github: 'https://github.com/boundless',
-    },
+export default function ProfileOverview({ user }: ProfileOverviewProps) {
+  const profileData: UserProfile = {
+    username: user.profile.username,
+    displayName: `${user.profile.firstName} ${user.profile.lastName}`,
+    bio: (user as unknown as { bio?: string }).bio || 'No bio available',
+    avatarUrl:
+      user.profile.avatar || '/landing/explore/project-placeholder-2.png',
+    socialLinks:
+      (user as unknown as { socialLinks?: Record<string, string> })
+        .socialLinks || {},
   };
 
-  const mockStats: UserStatsType = {
-    organizations: 3,
-    projects: 3,
-    following: 10,
-    followers: 5,
+  const statsData: UserStatsType = {
+    organizations: user.organizations?.length || 0,
+    projects: user.projects?.length || 0,
+    following: user.following?.length || 0,
+    followers: user.followers?.length || 0,
   };
 
-  const mockOrganizations: Organization[] = [
-    { name: 'Organization 1', avatarUrl: '/blog1.jpg' },
-    { name: 'Organization 2', avatarUrl: '/blog2.jpg' },
-  ];
+  const organizationsData: Organization[] =
+    user.organizations?.map(org => ({
+      name: org.name,
+      avatarUrl: org.avatar || '/blog1.jpg',
+    })) || [];
 
   return (
     <article className='flex w-[500px] flex-col gap-11 text-white'>
-      <ProfileHeader profile={mockProfile} />
-      <UserStats stats={mockStats} />
-      <OrganizationsList organizations={mockOrganizations} />
+      <ProfileHeader profile={profileData} stats={statsData} />
+
+      <OrganizationsList organizations={organizationsData} />
     </article>
   );
 }

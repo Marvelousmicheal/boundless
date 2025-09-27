@@ -1,19 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { UserProfile } from '@/types/profile';
+import { UserProfile, UserStats as UserStatsType } from '@/types/profile';
 import { BoundlessButton } from '@/components/buttons';
 import { BellPlus } from 'lucide-react';
 import { ProfileSocialLinks } from '@/lib/config';
+import UserStats from './UserStats';
 
 interface ProfileHeaderProps {
   profile: UserProfile;
+  stats: UserStatsType;
 }
 
-export default function ProfileHeader({ profile }: ProfileHeaderProps) {
+export default function ProfileHeader({ profile, stats }: ProfileHeaderProps) {
   return (
     <main className='flex flex-col gap-6'>
       <header className='flex items-end gap-4'>
-        <div className='relative size-[150px] overflow-hidden rounded-full bg-red-500'>
+        <div className='relative aspect-square size-[150px] overflow-hidden rounded-full'>
           <Image
             src={profile.avatarUrl}
             alt={`${profile.displayName} avatar`}
@@ -42,21 +44,25 @@ export default function ProfileHeader({ profile }: ProfileHeaderProps) {
                 alt={`${name} icon`}
                 width={24}
                 height={24}
-                className='h-6 w-6'
+                className='h-6 w-6 fill-white'
               />
             </Link>
             {index < Object.keys(ProfileSocialLinks).length - 1 && (
-              <div className='ml-4 h-6 w-0.5 bg-[#2B2B2B]' aria-hidden='true' />
+              <div
+                className='ml-4 h-6 w-[0.5px] bg-[#2B2B2B]'
+                aria-hidden='true'
+              />
             )}
           </div>
         ))}
       </div>
+      <UserStats stats={stats} />
       <div className='flex gap-4'>
-        <BoundlessButton>
-          Follow <BellPlus />
+        <BoundlessButton icon={<BellPlus />} iconPosition='right'>
+          Follow
         </BoundlessButton>
         <BoundlessButton variant='outline'>
-          share{' '}
+          Share
           <Image src='/share.svg' alt='Share icon' width={16} height={16} />
         </BoundlessButton>
       </div>

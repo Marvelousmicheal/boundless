@@ -18,7 +18,7 @@ export default function OrganizationCard({
           objectFit='cover'
         />
       </div>
-      <p className='font-base font-normal'>{organization.name}</p>
+      <p className='font-base font-normal text-white'>{organization.name}</p>
     </div>
   );
 }
