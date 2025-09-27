@@ -1,4 +1,5 @@
 'use client';
+import ProfileOverview from '@/components/profile/ProfileOverview';
 import { useEffect, useState } from 'react';
 
 interface ProfilePageProps {
@@ -33,6 +34,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
       <div className='container mx-auto px-4 py-8'>
         <h1 className='text-2xl font-bold text-white'>Profile: {username}</h1>
       </div>
+      <ProfileOverview username={username} />
     </section>
   );
 }
