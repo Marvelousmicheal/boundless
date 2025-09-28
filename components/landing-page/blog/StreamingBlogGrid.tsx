@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { BlogPost } from '@/types/blog';
+import { getBlogPosts, searchBlogPosts } from '@/lib/api/blog';
 import BlogCard from './BlogCard';
 import { Search, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -15,34 +16,29 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
-interface BlogGridProps {
-  posts: BlogPost[];
-  showLoadMore?: boolean;
-  maxPosts?: number;
-  totalPosts?: number;
-  initialPage?: number;
+interface StreamingBlogGridProps {
+  initialPosts: BlogPost[];
+  totalPosts: number;
+  hasMore: boolean;
+  initialPage: number;
 }
 
-const BlogGrid: React.FC<BlogGridProps> = ({
-  posts,
-  showLoadMore = true,
-  maxPosts,
-  initialPage = 1,
+const StreamingBlogGrid: React.FC<StreamingBlogGridProps> = ({
+  initialPosts,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  totalPosts,
+  hasMore: initialHasMore,
+  initialPage,
 }) => {
-  const [allPosts, setAllPosts] = useState<BlogPost[]>(posts);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>(initialPosts);
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [visiblePosts, setVisiblePosts] = useState(maxPosts || 12);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [visiblePosts, setVisiblePosts] = useState(12);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<'Latest' | 'Oldest' | ''>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [hasMorePosts, setHasMorePosts] = useState(showLoadMore);
-
-  // Update allPosts when posts prop changes
-  React.useEffect(() => {
-    setAllPosts(posts);
-  }, [posts]);
 
   // Filter and sort posts
   const filteredPosts = useMemo(() => {
@@ -80,7 +76,8 @@ const BlogGrid: React.FC<BlogGridProps> = ({
 
   // Get posts to display
   const displayPosts = filteredPosts.slice(0, visiblePosts);
-  const hasMorePostsToShow = visiblePosts < filteredPosts.length;
+  const hasMorePostsToShow = visiblePosts < filteredPosts.length || hasMore;
+
   // Blog categories
   const categories: string[] = [
     'Category 1',
@@ -89,33 +86,50 @@ const BlogGrid: React.FC<BlogGridProps> = ({
     'Category 4',
     'Category 5',
   ];
+
   // Sort options for dropdown
   const sortOptions: Array<'Latest' | 'Oldest'> = ['Latest', 'Oldest'];
 
   // Load more handler with streaming support
   const handleLoadMore = useCallback(async () => {
-    if (isLoading || !hasMorePosts) return;
+    if (isLoading || !hasMore) return;
 
     setIsLoading(true);
 
     try {
-      // Simulate streaming by loading more posts
       const nextPage = currentPage + 1;
-      const response = await fetch(`/api/blog/posts?page=${nextPage}&limit=12`);
 
-      if (response.ok) {
-        const data = await response.json();
-        setAllPosts(prev => [...prev, ...data.posts]);
-        setCurrentPage(nextPage);
-        setHasMorePosts(data.hasMore);
-        setVisiblePosts(prev => prev + 12);
+      // Use search API if there's a search query, otherwise use regular posts API
+      let data;
+      if (searchQuery.trim()) {
+        data = await searchBlogPosts({
+          q: searchQuery,
+          page: nextPage,
+          limit: 12,
+          category:
+            selectedCategories.length === 1 ? selectedCategories[0] : undefined,
+          tags: selectedCategories.length > 1 ? selectedCategories : undefined,
+        });
       } else {
-        // Fallback to local loading if API fails
-        setTimeout(() => {
-          setVisiblePosts(prev => prev + 12);
-          setIsLoading(false);
-        }, 500);
+        data = await getBlogPosts({
+          page: nextPage,
+          limit: 12,
+          category:
+            selectedCategories.length === 1 ? selectedCategories[0] : undefined,
+          tags: selectedCategories.length > 1 ? selectedCategories : undefined,
+          sort:
+            sortOrder === 'Latest'
+              ? 'latest'
+              : sortOrder === 'Oldest'
+                ? 'oldest'
+                : 'latest',
+        });
       }
+
+      setAllPosts(prev => [...prev, ...data.posts]);
+      setCurrentPage(nextPage);
+      setHasMore(data.hasMore);
+      setVisiblePosts(prev => prev + 12);
     } catch {
       // Fallback to local loading if API fails
       setTimeout(() => {
@@ -125,7 +139,14 @@ const BlogGrid: React.FC<BlogGridProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, hasMorePosts, currentPage]);
+  }, [
+    isLoading,
+    hasMore,
+    currentPage,
+    searchQuery,
+    selectedCategories,
+    sortOrder,
+  ]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories(prev =>
@@ -133,12 +154,12 @@ const BlogGrid: React.FC<BlogGridProps> = ({
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
-    setVisiblePosts(maxPosts || 12); // Reset visible posts when filtering
+    setVisiblePosts(12); // Reset visible posts when filtering
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setVisiblePosts(maxPosts || 12); // Reset visible posts when searching
+    setVisiblePosts(12); // Reset visible posts when searching
   };
 
   const handleCardClick = useCallback((slug: string) => {
@@ -330,7 +351,7 @@ const BlogGrid: React.FC<BlogGridProps> = ({
           )}
 
           {/* View More Button */}
-          {showLoadMore && hasMorePostsToShow && !isLoading && (
+          {hasMorePostsToShow && !isLoading && (
             <div className='mt-12 flex justify-center'>
               <button
                 onClick={handleLoadMore}
@@ -363,4 +384,4 @@ const BlogGrid: React.FC<BlogGridProps> = ({
   );
 };
 
-export default BlogGrid;
+export default StreamingBlogGrid;
